@@ -2,7 +2,8 @@
   "include": [
     "src/**/*",
     ".eslintrc.js",
-    "karma.conf.js"
+    "karma.conf.js", 
+    "declarations.d.ts"
   ],
   "exclude": [
     "./test/",
