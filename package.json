@@ -84,5 +84,8 @@
     "url": "https://github.com/digitalcredentials/isomorphic-lib-template"
   },
   "homepage": "https://github.com/digitalcredentials/isomorphic-lib-template",
-  "bugs": "https://github.com/digitalcredentials/isomorphic-lib-template/issues"
+  "bugs": "https://github.com/digitalcredentials/isomorphic-lib-template/issues",
+  "dependencies": {
+    "isomorphic-fetch": "^3.0.0"
+  }
 }
