@@ -12,9 +12,6 @@
   "ts-node": {
     "files": true
   },
-  "files": [
-    "src/declarations.d.ts"
-  ],
   "compileOnSave": true,
   "compilerOptions": {
     /* Basic Options */
