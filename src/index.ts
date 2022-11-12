@@ -1,4 +1,8 @@
 /*!
  * Copyright (c) 2022 Digital Credentials Consortium. All rights reserved.
  */
-export { Example } from './Example'
+
+export { registryCollections, loadRegistryCollections } from './registryCollections';
+export { generateIssuerAuthRegistry } from './issuerAuthRegistry';
+
+export * from './types';
