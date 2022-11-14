@@ -3,7 +3,6 @@
  */
 import 'isomorphic-fetch';
 
+export { Registry } from './lib';
 export { registryCollections, loadRegistryCollections } from './registryCollections';
-export { generateIssuerAuthRegistry } from './issuerAuthRegistry';
-
 export * from './types';
