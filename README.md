@@ -1,9 +1,9 @@
-# Example Isomorphic TS/JS Lib Template _(@digitalcredentials/isomorphic-lib-template)_
+# Issuer Registry Client _(@digitalcredentials/issuer-registry-client)_
 
-[![Build status](https://img.shields.io/github/workflow/status/digitalcredentials/isomorphic-lib-template/Node.js%20CI)](https://github.com/digitalcredentials/isomorphic-lib-template/actions?query=workflow%3A%22Node.js+CI%22)
-[![NPM Version](https://img.shields.io/npm/v/@digitalcredentials/isomorphic-lib-template.svg)](https://npm.im/@digitalcredentials/isomorphic-lib-template)
+[![Build status](https://img.shields.io/github/workflow/status/digitalcredentials/issuer-registry-client/Node.js%20CI)](https://github.com/digitalcredentials/issuer-registry-client/actions?query=workflow%3A%22Node.js+CI%22)
+[![NPM Version](https://img.shields.io/npm/v/@digitalcredentials/issuer-registry-client.svg)](https://npm.im/@digitalcredentials/issuer-registry-client)
 
-> A Typescript/Javascript isomorphic library template, for use in the browser, Node.js, and React Native.
+> A Typescript/Javascript isomorphic issuer registry client, for use in the browser, Node.js, and React Native.
 
 ## Table of Contents
 
@@ -24,14 +24,14 @@ TBD
 
 ## Install
 
-- Node.js 14+ is recommended.
+- Node.js 16+ is recommended.
 
 ### NPM
 
 To install via NPM:
 
 ```
-npm install @digitalcredentials/isomorphic-lib-template
+npm install @digitalcredentials/issuer-registry-client
 ```
 
 ### Development
@@ -39,8 +39,8 @@ npm install @digitalcredentials/isomorphic-lib-template
 To install locally (for development):
 
 ```
-git clone https://github.com/digitalcredentials/isomorphic-lib-template.git
-cd isomorphic-lib-template
+git clone https://github.com/digitalcredentials/issuer-registry-client.git
+cd issuer-registry-client
 npm install
 ```
 

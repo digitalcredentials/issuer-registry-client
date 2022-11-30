@@ -1,6 +1,6 @@
-# isomorphic-lib-template Changelog
+# issuer-registry-client Changelog
 
-## 1.0.0 - TBD
+## 1.0.0 - 2022-11-30
 
 ### Added
 
