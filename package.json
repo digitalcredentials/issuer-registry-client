@@ -81,10 +81,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/digitalcredentials/isomorphic-lib-template"
+    "url": "https://github.com/digitalcredentials/issuer-registry-client"
   },
-  "homepage": "https://github.com/digitalcredentials/isomorphic-lib-template",
-  "bugs": "https://github.com/digitalcredentials/isomorphic-lib-template/issues",
+  "homepage": "https://github.com/digitalcredentials/issuer-registry-client",
+  "bugs": "https://github.com/digitalcredentials/issuer-registry-client/issues",
   "dependencies": {
     "isomorphic-fetch": "^3.0.0"
   }
