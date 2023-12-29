@@ -1,2 +1,2 @@
-export * from './Registry';
-export * from './RegistryCollection';
+export * from '../Registry';
+export * from '../RegistryCollection';
