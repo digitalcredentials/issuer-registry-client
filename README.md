@@ -1,6 +1,6 @@
 # Known Issuer Registry Client _(@digitalcredentials/issuer-registry-client)_
 
-[![Build status](https://img.shields.io/github/workflow/status/digitalcredentials/issuer-registry-client/Node.js%20CI)](https://github.com/digitalcredentials/issuer-registry-client/actions?query=workflow%3A%22Node.js+CI%22)
+[![Build status](https://img.shields.io/github/actions/workflow/status/digitalcredentials/issuer-registry-client/main.yml?branch=main)](https://github.com/digitalcredentials/issuer-registry-client/actions?query=workflow%3A%22Node.js+CI%22)
 [![NPM Version](https://img.shields.io/npm/v/@digitalcredentials/issuer-registry-client.svg)](https://npm.im/@digitalcredentials/issuer-registry-client)
 
 > Isomorphic client for fetching Known Issuer/Known Verifier registries for Node, browser and React Native.
@@ -58,7 +58,7 @@ import { registryCollections, loadRegistryCollections } from '@digitalcredential
 await loadRegistryCollections()
 
 // You can now query to see if a given DID is in a registry
-isInRegistryCollection('did:example:123')
+registryCollections.isInRegistryCollection('did:example:123')
 // false
 ```
 
