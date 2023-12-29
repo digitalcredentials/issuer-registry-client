@@ -1,4 +1,4 @@
-# isomorphic-lib-template Changelog
+# issuer-registry-client Changelog
 
 ## 1.0.0 - TBD
 
