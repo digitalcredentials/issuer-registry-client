@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Digital Credentials Consortium. All rights reserved.
  */
 
-import { RegistryRaw } from '../types/registry';
+import { RegistryRaw } from '../types';
 
 export class Registry<Entry> implements RegistryRaw<Entry> {
   entries;
