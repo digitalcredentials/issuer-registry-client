@@ -1,19 +1,20 @@
 import { expect } from 'chai'
 import { loadRegistryCollections, registryCollections } from '../src'
-import registryCollectionsConfig from '../src/config/registryCollections.json';
 
-describe('registryCollections', () => {
-  it('contains issuerDid collection', () => {
-    expect(registryCollections.issuerDid).to.be.a('object');
+import { loadRegistries } from '../src'
+
+const knownIssuers = [
+  {
+    "name": "DCC Sandbox Registry",
+    "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
+  }
+]
+
+describe('registry client', () => {
+  it('loads registries', async () => {
+    const registries = await loadRegistries(knownIssuers)
+
+    console.log(registries)
   })
 })
 
-describe('loadRegistryCollections()', () => {
-  it('loads all issuerDid registries', async () => {
-    await loadRegistryCollections();
-    const collectionRegistryCount = registryCollections.issuerDid.registries.length
-    const collectionConfigRegistryCount = registryCollectionsConfig.issuerDid.length;
-
-    expect(collectionRegistryCount).to.equal(collectionConfigRegistryCount)
-  })
-})

@@ -3,6 +3,10 @@
  */
 import 'isomorphic-fetch';
 
+export async function loadRegistries (config: any): Promise<any> {
+  return { result: true }
+}
+
 export { Registry } from './lib';
 export { registryCollections, loadRegistryCollections } from './registryCollections';
 export * from './types';

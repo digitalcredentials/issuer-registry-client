@@ -16,11 +16,17 @@
 
 ## Background
 
-TBD
+This is a client library for loading Known Issuer or Known Verifier Registries,
+which are essentially dictionaries of DIDs, containing information on known
+issuers and verifiers.
+
+The format of these registries is temporary, while the 
+[Verifiable Issuers and Verifiers](https://w3c-ccg.github.io/verifiable-issuers-verifiers/)
+spec is being incubated in the W3C CCG.
 
 ## Security
 
-TBD
+Assumes the loaded registries are public, accessible via `https`.
 
 ## Install
 
@@ -46,20 +52,45 @@ npm install
 
 ## Usage
 
-The library exports two main things: a global `registryCollection`, containing 
-an instance of registry collections, and a loading function.
+First, put together an array of known issuer and verifier registries you would
+like to check against:
 
 ```js
-import { registryCollections, loadRegistryCollections } from '@digitalcredentials/issuer-registry-client'
+const knownRegistries = [
+  {
+    "name": "DCC Pilot Registry",
+    "url": "https://digitalcredentials.github.io/issuer-registry/registry.json"
+  },
+  {
+    "name": "DCC Sandbox Registry",
+    "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
+  },
+  {
+    "name": "DCC Community Registry",
+    "url": "https://digitalcredentials.github.io/community-registry/registry.json"
+  },
+  {
+    "name": "DCC Registry",
+    "url": "https://digitalcredentials.github.io/dcc-registry/registry.json"
+  }
+]
+```
 
-// registryCollections is empty, when first exported
+You can now fetch them and query them
+
+```js
+import { loadRegistries } from '@digitalcredentials/issuer-registry-client'
 
 // Load the registries from the web (typically done at app startup).
-await loadRegistryCollections()
+const registries = loadRegistries(knownRegistries)
 
-// You can now query to see if a given DID is in a registry
-registryCollections.isInRegistryCollection('did:example:123')
-// false
+registries.contains('did:example:123')
+// { result: false }
+
+// or
+registries.contains('did:example:456')
+// This DID is contained in one registry, DCC Registry
+// { result: true, names: ['DCC Registry'] }
 ```
 
 ## Contribute

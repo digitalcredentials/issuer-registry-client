@@ -1,4 +1,4 @@
-import { RemoteRegistryConfig } from '../types/registry';
+import { RemoteRegistryConfig } from './types/registry';
 import { Registry } from './Registry';
 
 export class RegistryCollection<Entry> {
