@@ -20,7 +20,7 @@ This is a client library for loading Known Issuer or Known Verifier Registries,
 which are essentially dictionaries of DIDs, containing information on known
 issuers and verifiers.
 
-The format of these registries is temporary, while the 
+The format of these registries is temporary, while the
 [Verifiable Issuers and Verifiers](https://w3c-ccg.github.io/verifiable-issuers-verifiers/)
 spec is being incubated in the W3C CCG.
 

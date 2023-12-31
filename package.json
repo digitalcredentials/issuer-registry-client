@@ -1,61 +1,49 @@
 {
   "name": "@digitalcredentials/issuer-registry-client",
-  "description": "Known issuers / trust registry client.",
-  "version": "1.0.0",
+  "description": "Known issuers / verifiers registry client, for use in Typescript, browser, and React Native.",
+  "version": "2.0.0",
   "scripts": {
-    "build": "npm run clear && tsc -p tsconfig.json",
+    "build": "npm run clear && tsc -d && tsc -p tsconfig.esm.json",
     "clear": "rimraf dist/*",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
+    "lint": "ts-standard --fix",
     "prepare": "npm run build",
     "rebuild": "npm run clear && npm run build",
-    "test": "npm run lint && npm run test-node",
+    "test": "npm run lint && npm run test-node && npm run test-karma",
     "test-karma": "karma start karma.conf.js",
-    "test-node": "cross-env NODE_ENV=test TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/*.ts'"
+    "test-node": "cross-env NODE_ENV=test TS_NODE_PROJECT=tsconfig.spec.json TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --project tsconfig.spec.json 'test/*.ts'"
   },
   "files": [
     "dist",
-    "src",
     "README.md",
     "LICENSE.md"
   ],
-  "module": "dist/index.js",
-  "browser": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js"
-    },
-    "./package.json": "./package.json"
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "dependencies": {
+    "@digitalcredentials/http-client": "^1.2.2"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.3",
-    "@types/mocha": "^10.0.0",
-    "@types/node": "^18.11.0",
-    "@typescript-eslint/eslint-plugin": "^5.40.0",
-    "@typescript-eslint/parser": "^5.40.0",
-    "chai": "^4.3.6",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.4.6",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "chai": "^4.3.7",
     "cross-env": "^7.0.3",
-    "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard-with-typescript": "^23.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-promise": "^6.1.0",
-    "karma": "^6.4.1",
+    "eslint": "^8.46.0",
+    "karma": "^6.4.2",
     "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^3.1.1",
+    "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "karma-sourcemap-loader": "^0.3.8",
-    "karma-typescript": "^5.5.3",
-    "mocha": "^10.1.0",
-    "nyc": "^15.1.0",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
+    "karma-sourcemap-loader": "^0.4.0",
+    "karma-typescript": "^5.5.4",
+    "mocha": "^10.2.0",
+    "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.1.6"
   },
   "publishConfig": {
     "access": "public"
@@ -67,9 +55,16 @@
     ],
     "spec": "test/**/*.ts"
   },
+  "ts-standard": {
+    "ignore": [
+      "dist"
+    ]
+  },
   "keywords": [
-    "interop",
-    "alliance"
+    "dcc",
+    "dids",
+    "did",
+    "registries"
   ],
   "engines": {
     "node": ">=18.0"
@@ -84,8 +79,5 @@
     "url": "https://github.com/digitalcredentials/issuer-registry-client"
   },
   "homepage": "https://github.com/digitalcredentials/issuer-registry-client",
-  "bugs": "https://github.com/digitalcredentials/issuer-registry-client/issues",
-  "dependencies": {
-    "isomorphic-fetch": "^3.0.0"
-  }
+  "bugs": "https://github.com/digitalcredentials/issuer-registry-client/issues"
 }
