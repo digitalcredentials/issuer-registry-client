@@ -28,6 +28,28 @@ spec is being incubated in the W3C CCG.
 
 Assumes the loaded registries are public, accessible via `https`.
 
+Note that an individual DID can appear in multiple registries.
+Because of that, the _order_ of registries loaded matters. For example, given
+a registry:
+
+```js
+const knownRegistries = [{
+    "name": "DCC Pilot Registry",
+    "url": "https://digitalcredentials.github.io/issuer-registry/registry.json"
+  },
+  {
+    "name": "DCC Sandbox Registry",
+    "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
+  }]
+```
+
+If an issuer DID is contained in both of those registries, the issuer entry
+(that contains the issuer name and URL) will come from the _first_ registry,
+"DCC Pilot Registry".
+
+In other words, verifiers and other implementers must order the registries
+_in order of most authoritative to least_.
+
 ## Install
 
 - Node.js 18+ is recommended.
@@ -76,21 +98,40 @@ const knownRegistries = [
 ]
 ```
 
-You can now fetch them and query them
+You can now:
 
 ```js
-import { loadRegistries } from '@digitalcredentials/issuer-registry-client'
+import { RegistryClient } from '@digitalcredentials/issuer-registry-client'
+
+const registries = new RegistryClient()
 
 // Load the registries from the web (typically done at app startup).
-const registries = loadRegistries(knownRegistries)
+await registries.load({ config: knownRegistries })
 
-registries.contains('did:example:123')
-// { result: false }
+// You can now query to see if a DID is known in any registry
+console.log(registries.didEntry('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W'))
+/**
+DidMapRegistryEntry {
+  name: 'My University',
+  url: 'https://digitalcredentials.mit.edu',
+  location: 'Cambridge, MA, USA',
+  inRegistries: Set(2) {
+    {
+      name: 'DCC Community Registry',
+      url: 'https://digitalcredentials.github.io/community-registry/registry.json',
+      rawContents: [Object]
+    },
+    {
+      name: 'DCC Sandbox Registry',
+      url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json',
+      rawContents: [Object]
+    }
+  }
+}
+ */
 
-// or
-registries.contains('did:example:456')
-// This DID is contained in one registry, DCC Registry
-// { result: true, names: ['DCC Registry'] }
+registries.didEntry('did:example:does-not-exist')
+// undefined
 ```
 
 ## Contribute
