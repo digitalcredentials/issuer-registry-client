@@ -1,6 +1,6 @@
-# issuer-registry-client Changelog
+# `@digitalcredentials/issuer-registry-client` Changelog
 
-## 3.0.0 -
+## 3.0.0 - 2024-08-05
 
 ### Changed
 - **BREAKING**: Update to latest `@digitalcredentials/http-client@5.0.2`
