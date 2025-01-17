@@ -120,12 +120,12 @@ export class RegistryClient {
             this.didMap.set(did, entry)
           }
         }
-        resultEntry!.loaded = true
+        if (resultEntry != null) resultEntry.loaded = true
       } catch (e) {
         console.log(`Could not load registry from url "${registry.url}":`, e)
         // no DIDs are added from that registry
-        resultEntry!.loaded = false
-        resultEntry!.error = e
+        if (resultEntry != null) resultEntry.loaded = false
+        if (resultEntry != null) resultEntry.error = e
       }
     }))
     return registryLoadResult
