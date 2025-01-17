@@ -106,7 +106,22 @@ import { RegistryClient } from '@digitalcredentials/issuer-registry-client'
 const registries = new RegistryClient()
 
 // Load the registries from the web (typically done at app startup).
-await registries.load({ config: knownRegistries })
+const result = await registries.load({ config: knownRegistries })
+console.log(result)
+/**
+  [
+  {
+    name: 'DCC Sandbox Registry',
+    url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json',
+    loaded: true
+  },
+  {
+    name: 'DCC Community Registry',
+    url: 'https://digitalcredentials.github.io/community-registry/registry.json',
+    loaded: true
+  }
+]
+ * 
 
 // You can now query to see if a DID is known in any registry
 console.log(registries.didEntry('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W'))
@@ -133,6 +148,7 @@ DidMapRegistryEntry {
 registries.didEntry('did:example:does-not-exist')
 // undefined
 ```
+
 
 ## Contribute
 

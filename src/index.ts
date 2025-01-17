@@ -71,6 +71,13 @@ export class DidMapRegistryEntry {
   }
 }
 
+export type LoadResult = {
+  name: string,
+  url: string,
+  loaded: boolean,
+  error?: any
+}
+
 export class RegistryClient {
   public registries?: DidMapRegistry[]
   public didMap: Map<string, DidMapRegistryEntry> = new Map()
@@ -89,12 +96,13 @@ export class RegistryClient {
    * ```
    * @param registries - Config object with a list of registries to load
    */
-  async load ({ config }: { config: any }): Promise<void> {
+  async load ({ config }: { config: any }): Promise<LoadResult[]> {
     // Clear previous DID map and entries
     this.didMap = new Map()
     this.registries = config as DidMapRegistry[]
-
+    const registryLoadResult = JSON.parse(JSON.stringify(this.registries)) as LoadResult[]
     await Promise.all(this.registries.map(async (registry) => {
+      const resultEntry = registryLoadResult.find((entry:LoadResult)=>entry.url === registry.url)
       try {
         // fetch registry contents
         const contents: any = await httpClient.get(registry.url)
@@ -112,11 +120,15 @@ export class RegistryClient {
             this.didMap.set(did, entry)
           }
         }
+        resultEntry!.loaded = true
       } catch (e) {
         console.log(`Could not load registry from url "${registry.url}":`, e)
-        // do nothing; no DIDs are added from that registry
+        // no DIDs are added from that registry
+        resultEntry!.loaded = false;
+        resultEntry!.error = e
       }
     }))
+    return registryLoadResult
   }
 
   didEntry (did: string): DidMapRegistryEntry | undefined {
