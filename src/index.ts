@@ -71,10 +71,10 @@ export class DidMapRegistryEntry {
   }
 }
 
-export type LoadResult = {
-  name: string,
-  url: string,
-  loaded: boolean,
+export interface LoadResult {
+  name: string
+  url: string
+  loaded: boolean
   error?: any
 }
 
@@ -102,7 +102,7 @@ export class RegistryClient {
     this.registries = config as DidMapRegistry[]
     const registryLoadResult = JSON.parse(JSON.stringify(this.registries)) as LoadResult[]
     await Promise.all(this.registries.map(async (registry) => {
-      const resultEntry = registryLoadResult.find((entry:LoadResult)=>entry.url === registry.url)
+      const resultEntry = registryLoadResult.find((entry: LoadResult) => entry.url === registry.url)
       try {
         // fetch registry contents
         const contents: any = await httpClient.get(registry.url)
@@ -124,7 +124,7 @@ export class RegistryClient {
       } catch (e) {
         console.log(`Could not load registry from url "${registry.url}":`, e)
         // no DIDs are added from that registry
-        resultEntry!.loaded = false;
+        resultEntry!.loaded = false
         resultEntry!.error = e
       }
     }))
