@@ -54,10 +54,13 @@ describe('registry client', () => {
     const client = new RegistryClient()
 
     const result = await client.load({ config: badIssuer })
-    console.log(result)
     expect(result.length).to.equal(2)
-    expect(result.find(entry => entry.url === 'https://digitalcredentials.github.io/sandbox-registry/registry.json')?.loaded).to.be.true
-    expect(result.find(entry => entry.url === 'https://digitalcredentials.github.io/community-registry/reggggistry.json')?.loaded).to.be.false
+    
+    const successfulLoad = result.find(entry => entry.url === 'https://digitalcredentials.github.io/sandbox-registry/registry.json')
+    expect(successfulLoad?.loaded).to.equal(true)
+    
+    const failedLoad = result.find(entry => entry.url === 'https://digitalcredentials.github.io/community-registry/reggggistry.json')
+    expect(failedLoad?.loaded).to.equal(false)
 
     const entry = client
       .didEntry('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
