@@ -1,5 +1,10 @@
 # `@digitalcredentials/issuer-registry-client` Changelog
 
+## 3.1.0 - 2025-02-09
+
+### Changed
+- `client.load(config)` now returns a result (whereas it previously returned null) showing which registries loaded sucessfully and which didn't. This allows clients to provide end users with more information (i.e, a registry couldn't be checked) if they want to.
+
 ## 3.0.0 - 2024-08-05
 
 ### Changed
