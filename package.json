@@ -3,14 +3,17 @@
   "description": "Known issuers / verifiers registry client, for use in Typescript, browser, and React Native.",
   "version": "3.1.0",
   "scripts": {
-    "build": "npm run clear && tsc -d && tsc -p tsconfig.esm.json",
+    "build-esm": "tsc -p tsconfig.esm.json",
+    "build-types": "tsc -p tsconfig.types.json",
+    "build-test": "tsc -p tsconfig.spec.json",
+    "build": "npm run clear && npm run build-types && npm run build-esm",
     "clear": "rimraf dist/*",
     "lint": "ts-standard --fix --project tsconfig.spec.json",
     "prepare": "npm run build",
     "rebuild": "npm run clear && npm run build",
     "test": "npm run lint && npm run test-node",
     "test-karma": "karma start karma.conf.js",
-    "test-node": "cross-env NODE_ENV=test TS_NODE_PROJECT=tsconfig.spec.json TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --project tsconfig.spec.json 'test/*.ts'"
+    "test-node": "npm run build-test && mocha dist/test/*.spec.js"
   },
   "files": [
     "dist",
@@ -18,9 +21,9 @@
     "README.md",
     "LICENSE.md"
   ],
-  "main": "dist/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@digitalcredentials/http-client": "^5.0.2"
   },
@@ -46,23 +49,8 @@
     "ts-standard": "^12.0.2",
     "typescript": "5.2.2"
   },
-  "resolutions": {
-    "@typescript-eslint/typescript-estree": "^6.1.6"
-  },
   "publishConfig": {
     "access": "public"
-  },
-  "mocha": {
-    "require": "ts-node/register",
-    "extension": [
-      "ts"
-    ],
-    "spec": "test/**/*.ts"
-  },
-  "ts-standard": {
-    "ignore": [
-      "dist"
-    ]
   },
   "keywords": [
     "dcc",
