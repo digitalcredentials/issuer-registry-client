@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { RegistryClient } from '../src'
+import { RegistryClient } from '../src/index.js'
 
 const expectedSuccessfulResult = [
   {
@@ -55,10 +55,10 @@ describe('registry client', () => {
 
     const result = await client.load({ config: badIssuer })
     expect(result.length).to.equal(2)
-    
+
     const successfulLoad = result.find(entry => entry.url === 'https://digitalcredentials.github.io/sandbox-registry/registry.json')
     expect(successfulLoad?.loaded).to.equal(true)
-    
+
     const failedLoad = result.find(entry => entry.url === 'https://digitalcredentials.github.io/community-registry/reggggistry.json')
     expect(failedLoad?.loaded).to.equal(false)
 
