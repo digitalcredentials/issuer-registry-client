@@ -3,7 +3,7 @@
 [![Build status](https://img.shields.io/github/actions/workflow/status/digitalcredentials/issuer-registry-client/main.yml?branch=main)](https://github.com/digitalcredentials/issuer-registry-client/actions?query=workflow%3A%22Node.js+CI%22)
 [![NPM Version](https://img.shields.io/npm/v/@digitalcredentials/issuer-registry-client.svg)](https://npm.im/@digitalcredentials/issuer-registry-client)
 
-> Isomorphic client for fetching Known Issuer/Known Verifier registries for Node, browser and React Native.
+> Isomorphic client for looking up DIDs in Known Issuer/Known Verifier registries. For Node, browser and React Native.
 
 ## Table of Contents
 
@@ -16,13 +16,11 @@
 
 ## Background
 
-This is a client library for loading Known Issuer or Known Verifier Registries,
-which are essentially dictionaries of DIDs, containing information on known
-issuers and verifiers.
+This is a client library for looking up DIDs in either:
 
-The format of these registries is temporary, while the
-[Verifiable Issuers and Verifiers](https://w3c-ccg.github.io/verifiable-issuers-verifiers/)
-spec is being incubated in the W3C CCG.
+- an OIDF registry using the /fetch?sub= oidf endpoint to lookup the did, passing it as the value of the 'sub' paramter
+- a static list of DIDs encoded in the format heretofore used by the DCC for it's member and community registries, and served publicly, like this one: https://github.com/digitalcredentials/dcc-community-registry/registry.json
+
 
 ## Security
 
@@ -30,7 +28,7 @@ Assumes the loaded registries are public, accessible via `https`.
 
 Note that an individual DID can appear in multiple registries.
 Because of that, the _order_ of registries loaded matters. For example, given
-a registry:
+a registry list:
 
 ```js
 const knownRegistries = [{
@@ -75,53 +73,47 @@ npm install
 ## Usage
 
 First, put together an array of known issuer and verifier registries you would
-like to check against:
+like to check against, like this publicly available copy of the DCC known registries:
+
+https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json
+
+which as of apr 22 2025 looked like so (reproduced here for convenience):
 
 ```js
-const knownRegistries = [
-  {
-    "name": "DCC Pilot Registry",
-    "url": "https://digitalcredentials.github.io/issuer-registry/registry.json"
-  },
-  {
-    "name": "DCC Sandbox Registry",
-    "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
-  },
-  {
-    "name": "DCC Community Registry",
-    "url": "https://digitalcredentials.github.io/community-registry/registry.json"
-  },
-  {
-    "name": "DCC Registry",
-    "url": "https://digitalcredentials.github.io/dcc-registry/registry.json"
-  }
+[
+    {
+        "type": "oidf",
+        "fetchEndpoint": "https://registry.dcconsortium.org/fetch?sub=",
+        "name": "DCC Member Registry"
+    },
+    {
+        "type": "dcc-legacy",
+        "name": "DCC Sandbox Registry",
+        "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
+    },
+    {
+        "type": "dcc-legacy",
+        "name": "DCC Community Registry",
+        "url": "https://digitalcredentials.github.io/community-registry/registry.json"
+    },
+    {
+        "type": "dcc-legacy",
+        "name": "MSP Registry",
+        "url": "https://sandbox-issuer.myskillspocket.com/registry.json"
+    }
 ]
 ```
 
-You can now:
+You can then use that list with this client:
 
 ```js
 import { RegistryClient } from '@digitalcredentials/issuer-registry-client'
 
 const registries = new RegistryClient()
 
-// Load the registries from the web (typically done at app startup).
-const result = await registries.load({ config: knownRegistries })
-console.log(result)
-/**
-  [
-  {
-    name: 'DCC Sandbox Registry',
-    url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json',
-    loaded: true
-  },
-  {
-    name: 'DCC Community Registry',
-    url: 'https://digitalcredentials.github.io/community-registry/registry.json',
-    loaded: true
-  }
-]
- * 
+const response = await fetch("https://digitalcredentials.github.io/dcc-known-registries/known-did-registries.json");
+const knownRegistries = await response.json();
+await registries.load({ config: knownRegistries })
 
 // You can now query to see if a DID is known in any registry
 console.log(registries.didEntry('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W'))
