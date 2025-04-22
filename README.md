@@ -31,19 +31,23 @@ Because of that, the _order_ of registries loaded matters. For example, given
 a registry list:
 
 ```js
-const knownRegistries = [{
-    "name": "DCC Pilot Registry",
-    "url": "https://digitalcredentials.github.io/issuer-registry/registry.json"
-  },
-  {
-    "name": "DCC Sandbox Registry",
-    "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
-  }]
+const knownRegistries = [
+   {
+        "type": "oidf",
+        "fetchEndpoint": "https://registry.dcconsortium.org/fetch?sub=",
+        "name": "DCC Member Registry"
+    },
+    {
+      "name": "DCC Sandbox Registry",
+      "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json",
+      "type": "dcc-legacy"
+    }
+]
 ```
 
 If an issuer DID is contained in both of those registries, the issuer entry
 (that contains the issuer name and URL) will come from the _first_ registry,
-"DCC Pilot Registry".
+"DCC Member Registry".
 
 In other words, verifiers and other implementers must order the registries
 _in order of most authoritative to least_.
