@@ -4,7 +4,7 @@
 
 
 /**
- * Example registry:
+ * Example registry entry:
  * @example
  * ```
  * {
@@ -35,12 +35,16 @@ export interface Registry {
  * ```
  */
 export interface IssuerMetaData {
- 
   name: string
   url: string
   legalName: string
   location: string
   inRegistries: string[]
+}
+
+export interface IssuerMatch {
+  issuer: IssuerMetaData,
+  registry: Registry
 }
 
 const DID_MAP_REGISTRY_SPEC_V01 = '2.0.0'
@@ -56,27 +60,27 @@ export class RegistryClient {
     }
   
 
-  async lookupIssuersFor (did: string): Promise<IssuerMetaData[] | undefined> {
+  async lookupIssuersFor (did: string): Promise<IssuerMatch[] | undefined> {
       // this next fetch will be called by whoever calls this issuer-registry-client, and the result passed in on the
   // 'use' method.
 //	const listOfKnownRegistries = fetch("https://github.com/digitalcredentials/known-registries/list.json");
 	// loop over all the registries, looking up the DID in each registry:
 	const matchingIssuers = await Promise.all(
+    // TODO: could use an accumulator here to filter out null entries.
 		this.registries.map( async registry => {
+      let issuer;
 			if (registry.type === 'oidf') {
-				const oidfFetchEndpoint = registry.fetchEndpoint // e.g., https://registry.dcconsortium.org/fetch?sub=
-				const response = await fetch(oidfFetchEndpoint + did)
-				const matchingIssuer = await response.json();
+        // e.g., https://registry.dcconsortium.org/fetch?sub=
+				const response = await fetch(registry.fetchEndpoint + did)
+				issuer = await response.json();
 				// maybe validate the JWT?
 				// likely transform the returned oidf entity statement into some simpler common form
-				return matchingIssuer
 			} else if (registry.type === 'dcc-legacy') {
-				const locationOfRegistry = registry.url as string
-				const response = await fetch(locationOfRegistry)
+				const response = await fetch(registry.url as string)
 				const listOfIssuersByDID = await response.json();
-				const matchingIssuer = listOfIssuersByDID.registry[did]
-				return matchingIssuer
+				issuer = listOfIssuersByDID.registry[did]
 			}
+      return {issuer, registry}
 		})
 	)
   // need to filter out nulls in this list:
