@@ -1,9 +1,10 @@
 import { expect } from 'chai'
 import { RegistryClient } from '../src/index.js'
 import nock from 'nock'
-import oidfFetchNock from './fixtures/nocks/oidfFetchNock.js'
+import { singleOIDFNock, doubleLegacyNock } from './fixtures/nocks/oidfFetchNock.js'
 import { knownRegistries } from './fixtures/knownRegistries.js'
 import { singleOIDFResult } from './fixtures/lookupResults/singleOIDFResult.js'
+import { doubleLegacyResult } from './fixtures/lookupResults/doubleLegacyResult.js'
 
 describe('registry client', () => {
   beforeEach(async () => {
@@ -15,13 +16,20 @@ describe('registry client', () => {
   })
 
   it('returns matching oidf result', async () => {
-    oidfFetchNock()
+    singleOIDFNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    console.log(JSON.stringify(result,null,2))
+    console.log(JSON.stringify(result, null, 2))
     expect(result).to.deep.equal(singleOIDFResult)
-    // expect(entry?.inRegistries?.size).to.equal(2)
+  })
+
+  it('returns matching legacy result', async () => {
+    doubleLegacyNock()
+    const client = new RegistryClient()
+    client.use({ registries: knownRegistries })
+    const result = await client.lookupIssuersFor('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
+    expect(result).to.deep.equal(doubleLegacyResult)
   })
 })
 
