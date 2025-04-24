@@ -2,7 +2,6 @@
  * Copyright (c) 2025 Digital Credentials Consortium. All rights reserved.
  */
 
-
 /**
  * Example registry entry:
  * @example
@@ -19,7 +18,7 @@ export interface Registry {
   type: 'oidf' | 'dcc-legacy'
   name: string
   url?: string
-  fetchEndpoint?: string,
+  fetchEndpoint?: string
   checked?: boolean
 }
 
@@ -45,12 +44,12 @@ export interface IssuerMetaData {
 }
 
 export interface IssuerMatch {
-  issuer: IssuerMetaData | null,
+  issuer: IssuerMetaData | null
   registry: Registry
 }
 
 export interface LookupResult {
-  matchingIssuers: IssuerMatch[],
+  matchingIssuers: IssuerMatch[]
   uncheckedRegistries: Registry[]
 }
 
@@ -59,28 +58,27 @@ const DID_MAP_REGISTRY_SPEC_V01 = '2.0.0'
 export class RegistryClient {
   private registries: Registry[]
   /**
-   * 
+   *
    * @param registries - an array of registries to load
    */
 
   // 'registries' will likely have been gotten with: fetch("https://github.com/digitalcredentials/known-registries/list.json");
 
-  use({ registries }: { registries: any }): void {
+  use ({ registries }: { registries: any }): void {
     this.registries = registries
   }
 
-
-  async lookupIssuersFor(did: string): Promise<LookupResult> {
+  async lookupIssuersFor (did: string): Promise<LookupResult> {
     // loop over all the registries, looking up the DID in each registry:
     const allRegistryLookups = await Promise.all(
       this.registries.map(async registry => {
-        registry.checked = false;
-        let issuer;
+        registry.checked = false
+        let issuer
         if (registry.type === 'oidf') {
           try {
-            const response = await fetch(registry.fetchEndpoint + did);
-            issuer = await response.json();
-            registry.checked = true;
+            const response = await fetch(registry.fetchEndpoint + did)
+            issuer = await response.json()
+            registry.checked = true
           } catch (e) {
             console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
             console.log(e)
@@ -89,15 +87,14 @@ export class RegistryClient {
           // likely transform the returned oidf entity statement into some simpler common form
         } else if (registry.type === 'dcc-legacy') {
           try {
-            const response = await fetch(registry.url as string);
-            const listOfIssuersByDID = await response.json();
-            issuer = listOfIssuersByDID.registry[did];
-            registry.checked = true;
+            const response = await fetch(registry.url as string)
+            const listOfIssuersByDID = await response.json()
+            issuer = listOfIssuersByDID.registry[did]
+            registry.checked = true
           } catch (e) {
             console.log(`error retrieving registry from endpoint: ${registry.fetchEndpoint}`)
             console.log(e)
           }
-
         }
         return { issuer, registry }
       })

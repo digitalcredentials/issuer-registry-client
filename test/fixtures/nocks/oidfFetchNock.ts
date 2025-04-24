@@ -1,11 +1,8 @@
 import nock from 'nock'
-
-const response = `{
-  
-}`
+import { oidfFetchResponse } from '../oidfFetchResponse.js'
 
 export default () => {
-  nock('http://localhost:4009/fetch?sub=did:key:234234')
-    .get('/fetch')
-    .reply(200, response)
+  nock('http://registry.dcconsortium.org')
+    .get('/fetch?sub=did:web:oneuni.testuni.edu')
+    .reply(200, oidfFetchResponse)
 }
