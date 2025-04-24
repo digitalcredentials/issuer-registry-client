@@ -77,7 +77,11 @@ export class RegistryClient {
         if (registry.type === 'oidf') {
           try {
             const response = await fetch(registry.fetchEndpoint + did)
-            issuer = await response.json()
+            if (response.status === 404) {
+              console.log('no DID found in oidf regsitry')
+            } else {
+              issuer = await response.json()
+            }
             registry.checked = true
           } catch (e) {
             console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
@@ -99,9 +103,9 @@ export class RegistryClient {
         return { issuer, registry }
       })
     )
-    const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer)
-    const uncheckedRegistries = allRegistryLookups.filter(lookup => !lookup.registry.checked).map(lookup => lookup.registry)
-    return { matchingIssuers, uncheckedRegistries }
+    const uncheckedRegistries = allRegistryLookups.filter(lookup => !lookup.registry.checked).map(lookup => lookup.registry).map(registry => { delete registry.checked; return registry })
+    const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer).map(lookup => { delete lookup.registry.checked; return lookup })
+     return { matchingIssuers, uncheckedRegistries }
   }
 
   constructor () {
