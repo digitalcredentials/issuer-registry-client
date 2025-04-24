@@ -1,71 +1,27 @@
 import { expect } from 'chai'
 import { RegistryClient } from '../src/index.js'
-
-const expectedSuccessfulResult = [
-  {
-    name: 'DCC Sandbox Registry',
-    url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json',
-    loaded: true
-  },
-  {
-    name: 'DCC Community Registry',
-    url: 'https://digitalcredentials.github.io/community-registry/registry.json',
-    loaded: true
-  }
-]
-
-const knownIssuers = [
-  {
-    name: 'DCC Sandbox Registry',
-    url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json'
-  },
-  {
-    name: 'DCC Community Registry',
-    url: 'https://digitalcredentials.github.io/community-registry/registry.json'
-  }
-]
-
-const badIssuer = [
-  {
-    name: 'DCC Sandbox Registry',
-    url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json'
-  },
-  {
-    name: 'DCC Community Registry',
-    url: 'https://digitalcredentials.github.io/community-registry/reggggistry.json'
-  }
-]
+import nock from 'nock'
+import oidfFetchNock from './nocks/oidfFetchNock.ts'
+import { knownRegistries } from './fixtures.ts'
 
 describe('registry client', () => {
-  it('loads registries', async () => {
-    const client = new RegistryClient()
 
-    const result = await client.load({ config: knownIssuers })
-    expect(result).to.deep.equal(expectedSuccessfulResult)
-
-    const entry = client
-      .didEntry('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
-    expect(entry?.inRegistries?.size).to.equal(2)
-
-    expect(client.didEntry('did:example:invalid')).to.equal(undefined)
+  beforeEach(async () => {
+    if (!nock.isActive()) nock.activate()
   })
 
-  it('returns error response for bad registries', async () => {
-    const client = new RegistryClient()
-
-    const result = await client.load({ config: badIssuer })
-    expect(result.length).to.equal(2)
-
-    const successfulLoad = result.find(entry => entry.url === 'https://digitalcredentials.github.io/sandbox-registry/registry.json')
-    expect(successfulLoad?.loaded).to.equal(true)
-
-    const failedLoad = result.find(entry => entry.url === 'https://digitalcredentials.github.io/community-registry/reggggistry.json')
-    expect(failedLoad?.loaded).to.equal(false)
-
-    const entry = client
-      .didEntry('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
-    expect(entry?.inRegistries?.size).to.equal(1)
-
-    expect(client.didEntry('did:example:invalid')).to.equal(undefined)
+  afterEach(async () => {
+    nock.restore()
   })
+
+  it('returns oidf result', async () => {
+    oidfFetchNock();
+    const client = new RegistryClient()
+    client.use({registries: knownRegistries})
+    const result = client.lookupIssuersFor('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
+    expect(result).to.deep.equal({'oidfResult': 'result'})
+    //expect(entry?.inRegistries?.size).to.equal(2)
+  })
+
+
 })
