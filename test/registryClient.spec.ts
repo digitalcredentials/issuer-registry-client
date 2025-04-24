@@ -23,3 +23,9 @@ describe('registry client', () => {
     // expect(entry?.inRegistries?.size).to.equal(2)
   })
 })
+
+/*
+tests to add:
+- 'use' fails on bad knownRegistries file.
+-
+*/

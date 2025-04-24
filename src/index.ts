@@ -56,7 +56,7 @@ export interface LookupResult {
 const DID_MAP_REGISTRY_SPEC_V01 = '2.0.0'
 
 export class RegistryClient {
-  private registries: Registry[]
+  #registries: Registry[]
   /**
    *
    * @param registries - an array of registries to load
@@ -65,13 +65,13 @@ export class RegistryClient {
   // 'registries' will likely have been gotten with: fetch("https://github.com/digitalcredentials/known-registries/list.json");
 
   use ({ registries }: { registries: any }): void {
-    this.registries = registries
+    this.#registries = registries
   }
 
   async lookupIssuersFor (did: string): Promise<LookupResult> {
     // loop over all the registries, looking up the DID in each registry:
     const allRegistryLookups = await Promise.all(
-      this.registries.map(async registry => {
+      this.#registries.map(async registry => {
         registry.checked = false
         let issuer
         if (registry.type === 'oidf') {
@@ -102,5 +102,9 @@ export class RegistryClient {
     const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer)
     const uncheckedRegistries = allRegistryLookups.filter(lookup => !lookup.registry.checked).map(lookup => lookup.registry)
     return { matchingIssuers, uncheckedRegistries }
+  }
+
+  constructor () {
+    this.#registries = []
   }
 }
