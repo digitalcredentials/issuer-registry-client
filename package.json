@@ -44,6 +44,7 @@
     "karma-sourcemap-loader": "^0.4.0",
     "karma-typescript": "^5.5.4",
     "mocha": "^10.2.0",
+    "nock": "^14.0.4",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
     "ts-standard": "^12.0.2",
