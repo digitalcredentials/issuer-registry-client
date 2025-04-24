@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2023 Digital Credentials Consortium. All rights reserved.
+ * Copyright (c) 2025 Digital Credentials Consortium. All rights reserved.
  */
 
 
@@ -63,46 +63,47 @@ export class RegistryClient {
    * @param registries - an array of registries to load
    */
 
-   // 'registries' will likely have been gotten with: fetch("https://github.com/digitalcredentials/known-registries/list.json");
+  // 'registries' will likely have been gotten with: fetch("https://github.com/digitalcredentials/known-registries/list.json");
 
-   use ({ registries }: { registries: any }): void {
+  use({ registries }: { registries: any }): void {
     this.registries = registries
   }
-  
 
-  async lookupIssuersFor (did: string): Promise<LookupResult> {
-  	// loop over all the registries, looking up the DID in each registry:
-  const allRegistryLookups = await Promise.all(
-		this.registries.map( async registry => {
-      let issuer;
-			if (registry.type === 'oidf') {
-        try {
-				  const response = await fetch(registry.fetchEndpoint + did);
-				  issuer = await response.json();
-          registry.checked = true;
-        } catch (e) {
-          console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
-          console.log(e)
+
+  async lookupIssuersFor(did: string): Promise<LookupResult> {
+    // loop over all the registries, looking up the DID in each registry:
+    const allRegistryLookups = await Promise.all(
+      this.registries.map(async registry => {
+        registry.checked = false;
+        let issuer;
+        if (registry.type === 'oidf') {
+          try {
+            const response = await fetch(registry.fetchEndpoint + did);
+            issuer = await response.json();
+            registry.checked = true;
+          } catch (e) {
+            console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
+            console.log(e)
+          }
+          // maybe validate the JWT?
+          // likely transform the returned oidf entity statement into some simpler common form
+        } else if (registry.type === 'dcc-legacy') {
+          try {
+            const response = await fetch(registry.url as string);
+            const listOfIssuersByDID = await response.json();
+            issuer = listOfIssuersByDID.registry[did];
+            registry.checked = true;
+          } catch (e) {
+            console.log(`error retrieving registry from endpoint: ${registry.fetchEndpoint}`)
+            console.log(e)
+          }
+
         }
-				// maybe validate the JWT?
-				// likely transform the returned oidf entity statement into some simpler common form
-			} else if (registry.type === 'dcc-legacy') {
-				try { 
-          const response = await fetch(registry.url as string);
-				  const listOfIssuersByDID = await response.json();
-          issuer = listOfIssuersByDID.registry[did];
-          registry.checked = true;
-        }  catch (e) {
-          console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
-          console.log(e)
-        }
-				
-			}
-      return {issuer, registry}
-		})
-	)
-  const matchingIssuers = allRegistryLookups.filter(lookup=>lookup.registry.checked && lookup.issuer)
-  const uncheckedRegistries = allRegistryLookups.filter(lookup=>!lookup.registry.checked).map(lookup=>lookup.registry)
-	return {matchingIssuers, uncheckedRegistries}
+        return { issuer, registry }
+      })
+    )
+    const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer)
+    const uncheckedRegistries = allRegistryLookups.filter(lookup => !lookup.registry.checked).map(lookup => lookup.registry)
+    return { matchingIssuers, uncheckedRegistries }
   }
 }
