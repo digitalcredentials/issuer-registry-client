@@ -21,7 +21,7 @@ export interface Registry {
   name: string
   url?: string
   fetchEndpoint?: string
-  checked?: boolean
+  unchecked?: boolean
 }
 
 /**
@@ -74,7 +74,7 @@ export class RegistryClient {
     // loop over all the registries, looking up the DID in each registry:
     const allRegistryLookups = await Promise.all(
       this.#registries.map(async registry => {
-        registry.checked = false
+        //registry.checked = false
         let issuer
         if (registry.type === 'oidf') {
           try {
@@ -85,10 +85,10 @@ export class RegistryClient {
               const jwtToken = await response.text()
               issuer = jwtDecode(jwtToken);
             }
-            registry.checked = true
           } catch (e) {
             console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
             console.log(e)
+            registry.unchecked = true
           }
           // maybe validate the JWT?
           // likely transform the returned oidf entity statement into some simpler common form
@@ -97,17 +97,17 @@ export class RegistryClient {
             const response = await fetch(registry.url as string)
             const listOfIssuersByDID = await response.json()
             issuer = listOfIssuersByDID.registry[did]
-            registry.checked = true
           } catch (e) {
             console.log(`error retrieving registry from endpoint: ${registry.fetchEndpoint}`)
             console.log(e)
+            registry.unchecked = true
           }
         }
         return { issuer, registry }
       })
     )
-    const uncheckedRegistries = allRegistryLookups.filter(lookup => !lookup.registry.checked).map(lookup => lookup.registry).map(registry => { delete registry.checked; return registry })
-    const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer).map(lookup => { delete lookup.registry.checked; return lookup })
+    const uncheckedRegistries = allRegistryLookups.filter(lookup => lookup.registry.unchecked).map(lookup => {delete lookup.registry.unchecked; return lookup.registry})
+    const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer)
     return { matchingIssuers, uncheckedRegistries }
   }
 
