@@ -1,9 +1,6 @@
 export const mixedResult = {
   "matchingIssuers": [
-    {
-      "issuer": {
-        "sub": "did:web:oneuni.testuni.edu",
-        "metadata": {
+    { "issuer": {
           "federation_entity": {
             "organization_name": "OneUni University",
             "homepage_uri": "https://oneuni.edu",
@@ -20,11 +17,7 @@ export const mixedResult = {
             "rorid": "042nb2s44",
             "ror_url": "https://ror.org/042nb2s44"
           }
-        },
-        "iss": "https://test.registry.dcconsortium.org",
-        "exp": 1745690382,
-        "iat": 1745603982,
-        "jti": "bvcqwgt0xsq"
+        
       },
       "registry": {
         "type": "oidf",

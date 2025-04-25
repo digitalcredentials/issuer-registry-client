@@ -2,18 +2,13 @@ export const singleOIDFResult = {
   matchingIssuers: [
     {
       issuer: {
-        sub: 'did:web:twotr.testschool.edu',
-        metadata: {
+        
           federation_entity: {
             organization_name: 'TwoTraining Nursing School',
             homepage_uri: 'https://twotraining.com',
             logo_uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAErSURBVEhLY3wro8JAS8AEpWkGRi0gCEYtIAgGiQV/vs54/8TjyR1hMPJ49WrPH6gMQUA4J9//8sTkww8I25SN4/QvCJujVUImgwXMxAsI++DubxBpKiB5RkZlh5jMWxn5ldxAgR/Vn7+CJAgBosqi+38YFJEd++eDx4s3p9lEzogJKEKFcAKi4gDFdBIBWanoz6/TUBZhQI4Fe75/ApKmXNwEwwcISLfgz4ceUOzylfCwQgTwAxIt+PO1CBi9DAzxImIuUCECgBQLQInn+UJQkpXv44CKEQTEWnD/xytQ0mTgiBeR30Fc4EAAEfkAGCzvni/8xcDAxtcqJEZM7kUGJBUVHKZsYBoGtLjE+wj5hqRI/gEsiJDRNag4PjDabCEIRi0gCEYtIAAYGACdDWh34SOxkgAAAABJRU5ErkJggg=='
           }
-        },
-        iss: 'https://test.registry.dcconsortium.org',
-        exp: 1745679643,
-        iat: 1745593243,
-        jti: 'aq39kgocz69'
+        
       },
       registry: {
         type: 'oidf',

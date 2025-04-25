@@ -83,7 +83,8 @@ export class RegistryClient {
               console.log('no DID found in oidf regsitry')
             } else {
               const jwtToken = await response.text()
-              issuer = jwtDecode(jwtToken);
+              const decodedJWT = jwtDecode(jwtToken) as any;
+              issuer = decodedJWT.metadata
             }
           } catch (e) {
             console.log(`error calling oidf endpoint: ${registry.fetchEndpoint}`)
