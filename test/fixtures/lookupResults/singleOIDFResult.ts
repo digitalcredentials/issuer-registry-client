@@ -2,33 +2,22 @@ export const singleOIDFResult = {
   matchingIssuers: [
     {
       issuer: {
-        sub: 'did:web:oneuni.testuni.edu',
+        sub: 'did:web:twotr.testschool.edu',
         metadata: {
           federation_entity: {
-            organization_name: 'OneUni University',
-            homepage_uri: 'https://oneuni.edu',
-            logo_uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAB4SURBVEhLY1Da6ENTNGoBQTRqAUE0Yixwkq3X5tNgAANBkRlosvgQERbM0OaAmAwFNLFAkMNdW2KGkwjIE1S3AIFGLSCIRi0giEYtwIHq5Tk0BCEIaDwIwLh89RiKMRBRFkDNxQBUsoAyNGoBQTRqAUE01C3Y6AMAsDxJowXOs6oAAAAASUVORK5CYII='
-          },
-          institution_additional_information: {
-            legal_name: 'Board and Trustees of OneUni University'
-          },
-          credential_registry_entity: {
-            ctid: 'ce-e8a41a52-6ff6-48f0-9872-889c87b093b7',
-            ctid_url: 'https://credentialengineregistry.org/resources/ce-e8a41a52-6ff6-48f0-9872-889c87b093b7'
-          },
-          ror_entity: {
-            rorid: '042nb2s44',
-            ror_url: 'https://ror.org/042nb2s44'
+            organization_name: 'TwoTraining Nursing School',
+            homepage_uri: 'https://twotraining.com',
+            logo_uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAErSURBVEhLY3wro8JAS8AEpWkGRi0gCEYtIAgGiQV/vs54/8TjyR1hMPJ49WrPH6gMQUA4J9//8sTkww8I25SN4/QvCJujVUImgwXMxAsI++DubxBpKiB5RkZlh5jMWxn5ldxAgR/Vn7+CJAgBosqi+38YFJEd++eDx4s3p9lEzogJKEKFcAKi4gDFdBIBWanoz6/TUBZhQI4Fe75/ApKmXNwEwwcISLfgz4ceUOzylfCwQgTwAxIt+PO1CBi9DAzxImIuUCECgBQLQInn+UJQkpXv44CKEQTEWnD/xytQ0mTgiBeR30Fc4EAAEfkAGCzvni/8xcDAxtcqJEZM7kUGJBUVHKZsYBoGtLjE+wj5hqRI/gEsiJDRNag4PjDabCEIRi0gCEYtIAAYGACdDWh34SOxkgAAAABJRU5ErkJggg=='
           }
         },
-        iss: 'https://w3447ka4vf.execute-api.us-east-1.amazonaws.com/dev/issuer-registry',
-        exp: 1742495568,
-        iat: 1742409168,
-        jti: '523ae99d621a235f48acd3a8da7abda6'
+        iss: 'https://test.registry.dcconsortium.org',
+        exp: 1745679643,
+        iat: 1745593243,
+        jti: 'aq39kgocz69'
       },
       registry: {
         type: 'oidf',
-        fetchEndpoint: 'https://registry.dcconsortium.org/fetch?sub=',
+        fetchEndpoint: 'https://test.registry.dcconsortium.org/fetch?sub=',
         name: 'DCC Member Registry'
       }
     }

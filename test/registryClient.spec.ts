@@ -7,21 +7,23 @@ import { singleOIDFResult } from './fixtures/lookupResults/singleOIDFResult.js'
 import { doubleLegacyResult } from './fixtures/lookupResults/doubleLegacyResult.js'
 
 describe('registry client', () => {
+
+  
   beforeEach(async () => {
     if (!nock.isActive()) nock.activate()
   })
 
   afterEach(async () => {
     nock.restore()
-  })
+  }) 
 
   it('returns matching oidf result', async () => {
     singleOIDFNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
-    const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    console.log(JSON.stringify(result, null, 2))
+    const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
     expect(result).to.deep.equal(singleOIDFResult)
+    
   })
 
   it('returns matching legacy result', async () => {
