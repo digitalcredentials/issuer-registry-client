@@ -1,123 +1,123 @@
 export default {
-    "meta": {
-      "created": "2022-10-27T17:57:31+00:00",
-      "updated": "2025-03-12T16:20:00+00:00"
-    },   
-    "registry": {
-      "did:web:digitalcredentials.github.io:dcc-did-web": {
-        "name": "DCC did:web test",
-        "location": "Cambridge, MA, USA",
-        "url": "https://digitalcredentials.mit.edu"
-      },
-      "did:web:digitalcredentials.github.io:dcc-did-web:multikey": {
-        "name": "DCC did:web multikey test",
-        "location": "Cambridge, MA, USA",
-        "url": "https://digitalcredentials.mit.edu"
-      },
-      "did:key:z6MkgPBJwKZD8FeFYpps9opan1VdVAeo8EvzJc15BofGujkV": {
-        "name": "IdentifierObjectTest",
-        "location": "Cambridge, MA, USA",
-        "url": "https://digitalcredentials.mit.edu"
-      },
-      "did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W": {
-        "name": "(Example) My University",
-        "location": "Cambridge, MA, USA",
-        "url": "https://digitalcredentials.mit.edu"
-      },
-      "did:key:z6Mktpn6cXks1PBKLMgZH2VaahvCtBMF6K8eCa7HzrnuYLZv": {
-        "name": "James Test",
-        "location": "Ancaster, ON, Canada",
-        "url": "https://somewhere.org"
-      },
-      "did:key:z6MknvVdQF7JUJ1WtLbjUJU7xuUDoFND2F2fhPcJkrXcYG55": {
-        "name": "James second test",
-        "location": "Hamilton, ON, Canada",
-        "url": "https://hamilton.ca"
-      },
-      "did:key:z6MkgZPw6o5x8VTDyaTupza5bJMprsCrwD48RkxDksfx4qoU": {
-        "name": "James third test",
-        "location": "Hamilton, ON, Canada",
-        "url": "https://hamilton.ca"
-      },
-      "did:key:z6Mkmjp1vQNev9wYjRA9DqnXwKRuDTb85UGhcjK1FTWrdu6X": {
-        "name": "Digital Credentials Consortium Test Issuer",
-        "location": "Ancaster, ON, Canada",
-        "url": "https://www.dcconsortium.org/"
-      },
-      "did:key:z6MkkePoGJV8CQJJULSHHUEv71okD9PsrqXnZpNQuoUfb3id": {
-        "name": "Open edX Test Issuer (RaccoonGang)",
-        "location": "Cambridge, MA, USA",
-        "url": "https://openedx.org/"
-      },
-      "did:key:z6MkwDsrhd2TWx1vExAh3CLwAdBuUtvTQQNXGH2Q1VkrjrDo": {
-        "name": "Kerri Demo Issuer",
-        "location": "Cambridge, MA, USA",
-        "url": "https://demo-vc-issue.tunnelto.dev/basic-obv3"
-      },
-      "did:key:z6MktX5qZqmCSXw6q4Mh9kVky1aMU5DptPeCvJrDnHTVvzaL": {
-        "name": "CS50 Demo Issuer",
-        "location": "Cambridge, MA, USA",
-        "url": "https://issuer.cs50.harvard.edu"
-      },
-      "did:key:z6Mkr3oy4PPP5cBpdgvmz1mqqPWkVrzzkEq2btA1exN9YiVX": {
-        "name": "SOLID Issuer",
-        "location": "Fairfax, VA, USA",
-        "url": "https://solidinfodesign.com"
-      },
-      "did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q": {
-        "name": "Public Test Issuer",
-        "location": "Everywhere",
-        "url": "https://dcconsortium.org"
-      },
-      "did:key:z6MkjSdgaUNWTQsH8RbkrNoxk98ZA2FHQsyEFEcHAEGhk3dB": {
-        "name": "Instituto Tecnológico de Monterrey Test",
-        "location": "Monterrey, Nuevo León, México",
-        "url": "https://tec.mx/es"
-      },
-      "did:key:z6Mkn957Vwed2zBLLZkYiDgoha3cm1KtSE3PeAryJf3T7Vwz": {
-        "name": "ASU Test Issuer",
-        "location": "AZ, USA",
-        "url": "https://www.asu.edu/"
-      },
-      "did:key:z6MktdZHB8NkAnjeWy6jcFyvYvm4tPoJS1c6wu1CEMsq9HLY": {
-        "name": "Instituto Tecnológico de Monterrey Test",
-        "location": "Monterrey, Nuevo León, México",
-        "url": "https://tec.mx/es"
-      },
-      "did:web:dtt.dtlab-labcn.app": {
-        "name": "Digital Trust Test Bench",
-        "location": "Gatineau, Québec, Canada",
-        "url": "https://dtt.dtlab-labcn.app"
-      },
-      "did:web:participate.dev": {
-        "name": "Participate, Inc (TEST)",
-        "location": "Chapel Hill, NC, USA",
-        "url": "https://www.participate.com"
-      },
-      "did:web:participate.community": {
-        "name": "Participate, Inc",
-        "location": "Chapel Hill, NC, USA",
-        "url": "https://www.participate.com"
-      },
-      "did:key:z6MkvabuhEZkoAy3UnUsh5fiwbDr8B6kunnVXL8TL5QYd1W5": {
-        "name": "IQ4.com",
-        "location": "Everywhere",
-        "url": "https://www.iq4.com"
-      },
-      "did:key:z6Mkg46LMYuNKKao6oYF3vngsRBqsj74fBpuCBbfyPUmXD8T": {
-        "name": "WGU R&D: General",
-        "location": "Millcreek, UT, USA",
-        "url": "https://www.wgu.edu"
-      },
-      "did:web:www.credly.com:api:v1:obi:v3:issuers:ede32dcc-9168-4563-9352-8725936d5231": {
-        "name": "Credly Test OBv3 PM"
-      },
-      "did:web:www.credly.com:api:v1:obi:v3:issuers:e0e2733e-936d-462a-8af0-d14c5fa7fd1a": {
-        "name": "Credly Test OBv3 EDL"
-      },
-      "did:key:z6MkfZq9f2cnn4HbZLQKpmC62fg5S9LpGBhuVqHRkvM6ZyEd": {
-        "name": "InnovateUS",
-        "url": "https://innovate-us.org"
-      }
+  meta: {
+    created: '2022-10-27T17:57:31+00:00',
+    updated: '2025-03-12T16:20:00+00:00'
+  },
+  registry: {
+    'did:web:digitalcredentials.github.io:dcc-did-web': {
+      name: 'DCC did:web test',
+      location: 'Cambridge, MA, USA',
+      url: 'https://digitalcredentials.mit.edu'
+    },
+    'did:web:digitalcredentials.github.io:dcc-did-web:multikey': {
+      name: 'DCC did:web multikey test',
+      location: 'Cambridge, MA, USA',
+      url: 'https://digitalcredentials.mit.edu'
+    },
+    'did:key:z6MkgPBJwKZD8FeFYpps9opan1VdVAeo8EvzJc15BofGujkV': {
+      name: 'IdentifierObjectTest',
+      location: 'Cambridge, MA, USA',
+      url: 'https://digitalcredentials.mit.edu'
+    },
+    'did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W': {
+      name: '(Example) My University',
+      location: 'Cambridge, MA, USA',
+      url: 'https://digitalcredentials.mit.edu'
+    },
+    'did:key:z6Mktpn6cXks1PBKLMgZH2VaahvCtBMF6K8eCa7HzrnuYLZv': {
+      name: 'James Test',
+      location: 'Ancaster, ON, Canada',
+      url: 'https://somewhere.org'
+    },
+    'did:key:z6MknvVdQF7JUJ1WtLbjUJU7xuUDoFND2F2fhPcJkrXcYG55': {
+      name: 'James second test',
+      location: 'Hamilton, ON, Canada',
+      url: 'https://hamilton.ca'
+    },
+    'did:key:z6MkgZPw6o5x8VTDyaTupza5bJMprsCrwD48RkxDksfx4qoU': {
+      name: 'James third test',
+      location: 'Hamilton, ON, Canada',
+      url: 'https://hamilton.ca'
+    },
+    'did:key:z6Mkmjp1vQNev9wYjRA9DqnXwKRuDTb85UGhcjK1FTWrdu6X': {
+      name: 'Digital Credentials Consortium Test Issuer',
+      location: 'Ancaster, ON, Canada',
+      url: 'https://www.dcconsortium.org/'
+    },
+    'did:key:z6MkkePoGJV8CQJJULSHHUEv71okD9PsrqXnZpNQuoUfb3id': {
+      name: 'Open edX Test Issuer (RaccoonGang)',
+      location: 'Cambridge, MA, USA',
+      url: 'https://openedx.org/'
+    },
+    'did:key:z6MkwDsrhd2TWx1vExAh3CLwAdBuUtvTQQNXGH2Q1VkrjrDo': {
+      name: 'Kerri Demo Issuer',
+      location: 'Cambridge, MA, USA',
+      url: 'https://demo-vc-issue.tunnelto.dev/basic-obv3'
+    },
+    'did:key:z6MktX5qZqmCSXw6q4Mh9kVky1aMU5DptPeCvJrDnHTVvzaL': {
+      name: 'CS50 Demo Issuer',
+      location: 'Cambridge, MA, USA',
+      url: 'https://issuer.cs50.harvard.edu'
+    },
+    'did:key:z6Mkr3oy4PPP5cBpdgvmz1mqqPWkVrzzkEq2btA1exN9YiVX': {
+      name: 'SOLID Issuer',
+      location: 'Fairfax, VA, USA',
+      url: 'https://solidinfodesign.com'
+    },
+    'did:key:z6MknNQD1WHLGGraFi6zcbGevuAgkVfdyCdtZnQTGWVVvR5Q': {
+      name: 'Public Test Issuer',
+      location: 'Everywhere',
+      url: 'https://dcconsortium.org'
+    },
+    'did:key:z6MkjSdgaUNWTQsH8RbkrNoxk98ZA2FHQsyEFEcHAEGhk3dB': {
+      name: 'Instituto Tecnológico de Monterrey Test',
+      location: 'Monterrey, Nuevo León, México',
+      url: 'https://tec.mx/es'
+    },
+    'did:key:z6Mkn957Vwed2zBLLZkYiDgoha3cm1KtSE3PeAryJf3T7Vwz': {
+      name: 'ASU Test Issuer',
+      location: 'AZ, USA',
+      url: 'https://www.asu.edu/'
+    },
+    'did:key:z6MktdZHB8NkAnjeWy6jcFyvYvm4tPoJS1c6wu1CEMsq9HLY': {
+      name: 'Instituto Tecnológico de Monterrey Test',
+      location: 'Monterrey, Nuevo León, México',
+      url: 'https://tec.mx/es'
+    },
+    'did:web:dtt.dtlab-labcn.app': {
+      name: 'Digital Trust Test Bench',
+      location: 'Gatineau, Québec, Canada',
+      url: 'https://dtt.dtlab-labcn.app'
+    },
+    'did:web:participate.dev': {
+      name: 'Participate, Inc (TEST)',
+      location: 'Chapel Hill, NC, USA',
+      url: 'https://www.participate.com'
+    },
+    'did:web:participate.community': {
+      name: 'Participate, Inc',
+      location: 'Chapel Hill, NC, USA',
+      url: 'https://www.participate.com'
+    },
+    'did:key:z6MkvabuhEZkoAy3UnUsh5fiwbDr8B6kunnVXL8TL5QYd1W5': {
+      name: 'IQ4.com',
+      location: 'Everywhere',
+      url: 'https://www.iq4.com'
+    },
+    'did:key:z6Mkg46LMYuNKKao6oYF3vngsRBqsj74fBpuCBbfyPUmXD8T': {
+      name: 'WGU R&D: General',
+      location: 'Millcreek, UT, USA',
+      url: 'https://www.wgu.edu'
+    },
+    'did:web:www.credly.com:api:v1:obi:v3:issuers:ede32dcc-9168-4563-9352-8725936d5231': {
+      name: 'Credly Test OBv3 PM'
+    },
+    'did:web:www.credly.com:api:v1:obi:v3:issuers:e0e2733e-936d-462a-8af0-d14c5fa7fd1a': {
+      name: 'Credly Test OBv3 EDL'
+    },
+    'did:key:z6MkfZq9f2cnn4HbZLQKpmC62fg5S9LpGBhuVqHRkvM6ZyEd': {
+      name: 'InnovateUS',
+      url: 'https://innovate-us.org'
     }
   }
+}

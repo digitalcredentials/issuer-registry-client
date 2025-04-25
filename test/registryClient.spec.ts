@@ -1,6 +1,5 @@
 import { expect } from 'chai'
 import { RegistryClient } from '../src/index.js'
-import nock from 'nock'
 import { dccOidfNockA, dccOidfNockB, dccOidf404Nock } from './fixtures/nocks/oidfFetchNock.js'
 import { sandboxRegistryNock, communityRegistryNock } from './fixtures/nocks/legacyRegistryNocks.js'
 import { knownRegistries } from './fixtures/knownRegistries.js'
@@ -9,7 +8,6 @@ import { doubleLegacyResult } from './fixtures/didLookupResults/doubleLegacyResu
 import { mixedResult } from './fixtures/didLookupResults/mixedResult.js'
 
 describe('registry client', () => {
-
   it('returns matching oidf result', async () => {
     dccOidfNockB()
     const client = new RegistryClient()
@@ -37,10 +35,6 @@ describe('registry client', () => {
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
     expect(result).to.deep.equal(mixedResult)
   })
-
-
-
-
 })
 
 /*
