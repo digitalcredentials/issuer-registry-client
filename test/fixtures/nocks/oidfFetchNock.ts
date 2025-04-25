@@ -1,21 +1,20 @@
 import nock from 'nock'
-import { oidfFetchResponse } from '../httpResponses/oidfResponses/oidfFetchResponse.js'
+import { oidfFetchResponseA } from '../httpResponses/oidfResponses/oidfFetchResponseA.js'
+import { oidfFetchResponseB } from '../httpResponses/oidfResponses/oidfFetchResponseB.js'
 
-// a missing did for this next one:  ?????
-// https://test.registry.dcconsortium.org/fetch?sub=did:web:twotr.testschool.edu
-
-export const singleOIDFNock = () => {
+export const dccOidfNockA = () => {
   nock('https://test.registry.dcconsortium.org')
-    .get('/fetch?sub=did:web:twotr.testschool.edu')
-    .reply(200, oidfFetchResponse)
+    .get('/fetch?sub=did:web:oneuni.testuni.edu')
+    .reply(200, oidfFetchResponseA)
 }
 
-export const doubleLegacyNock = () => {
-  // this nock returns a result listing two legacy registries
+export const dccOidfNockB = () => {
   nock('https://test.registry.dcconsortium.org')
     .get('/fetch?sub=did:web:twotr.testschool.edu')
-    .reply(200, oidfFetchResponse)
+    .reply(200, oidfFetchResponseB)
+}
 
+export const dccOidf404Nock = () => {
   // this nock returns a 404 (no DID found) result from the oidf registry
   nock('https://test.registry.dcconsortium.org')
     .get('/fetch?sub=did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
