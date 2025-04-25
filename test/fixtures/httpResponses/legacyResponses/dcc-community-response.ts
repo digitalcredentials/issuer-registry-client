@@ -110,6 +110,11 @@ export default {
             "name": "Proof of Knowledge Test",
             "location": "Argentina",
             "url": "https://www.pok.tech/"
+        },
+        "did:web:oneuni.testuni.edu": {
+            "name": "Issuer Registry Client test",
+            "location": "here",
+            "url": "https://dcconsortium.org/"
         }
     }
 }
