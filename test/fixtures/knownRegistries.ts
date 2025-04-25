@@ -1,7 +1,7 @@
 export const knownRegistries = [
   {
     type: 'oidf',
-    fetchEndpoint: 'https://registry.dcconsortium.org/fetch?sub=',
+    fetchEndpoint: 'https://test.registry.dcconsortium.org/fetch?sub=',
     name: 'DCC Member Registry'
   },
   {

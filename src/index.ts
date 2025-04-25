@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 /*!
  * Copyright (c) 2025 Digital Credentials Consortium. All rights reserved.
  */
@@ -64,11 +66,11 @@ export class RegistryClient {
 
   // 'registries' will likely have been gotten with: fetch("https://github.com/digitalcredentials/known-registries/list.json");
 
-  use ({ registries }: { registries: any }): void {
+  use({ registries }: { registries: any }): void {
     this.#registries = registries
   }
 
-  async lookupIssuersFor (did: string): Promise<LookupResult> {
+  async lookupIssuersFor(did: string): Promise<LookupResult> {
     // loop over all the registries, looking up the DID in each registry:
     const allRegistryLookups = await Promise.all(
       this.#registries.map(async registry => {
@@ -80,7 +82,8 @@ export class RegistryClient {
             if (response.status === 404) {
               console.log('no DID found in oidf regsitry')
             } else {
-              issuer = await response.json()
+              const jwtToken = await response.text()
+              issuer = jwtDecode(jwtToken);
             }
             registry.checked = true
           } catch (e) {
@@ -105,10 +108,10 @@ export class RegistryClient {
     )
     const uncheckedRegistries = allRegistryLookups.filter(lookup => !lookup.registry.checked).map(lookup => lookup.registry).map(registry => { delete registry.checked; return registry })
     const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer).map(lookup => { delete lookup.registry.checked; return lookup })
-     return { matchingIssuers, uncheckedRegistries }
+    return { matchingIssuers, uncheckedRegistries }
   }
 
-  constructor () {
+  constructor() {
     this.#registries = []
   }
 }
