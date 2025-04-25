@@ -35,7 +35,6 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    console.log(JSON.stringify(result,null,2))
     expect(result).to.deep.equal(mixedResult)
   })
 

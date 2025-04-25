@@ -79,9 +79,7 @@ export class RegistryClient {
         if (registry.type === 'oidf') {
           try {
             const response = await fetch(registry.fetchEndpoint + did)
-            if (response.status === 404) {
-              console.log('no DID found in oidf regsitry')
-            } else {
+            if (response.status !== 404) {
               const jwtToken = await response.text()
               const decodedJWT = jwtDecode(jwtToken) as any;
               issuer = decodedJWT.metadata
@@ -97,7 +95,13 @@ export class RegistryClient {
           try {
             const response = await fetch(registry.url as string)
             const listOfIssuersByDID = await response.json()
-            issuer = listOfIssuersByDID.registry[did]
+            const entry = listOfIssuersByDID.registry[did]
+            issuer = entry?{
+              federation_entity: {
+                organization_name: entry.name,
+                homepage_uri: entry.url,
+                location: entry.location
+            }}:null
           } catch (e) {
             console.log(`error retrieving registry from endpoint: ${registry.fetchEndpoint}`)
             console.log(e)

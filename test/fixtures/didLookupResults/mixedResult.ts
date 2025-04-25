@@ -27,9 +27,11 @@ export const mixedResult = {
     },
     {
       "issuer": {
-        "name": "Issuer Registry Client test",
-        "location": "here",
-        "url": "https://dcconsortium.org/"
+          federation_entity: {
+            organization_name: "Issuer Registry Client test",
+            homepage_uri: "https://dcconsortium.org/",
+            location: "here"
+        }
       },
       "registry": {
         "type": "dcc-legacy",
