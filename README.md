@@ -120,7 +120,7 @@ await registryClient.use({ registries: knownRegistries })
 
 // You can now query to see if a DID is known in any registry
 const results = registryClient.lookupIssuersFor('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W'))
-```js
+```
 
 The lookup returns:
 
@@ -129,61 +129,60 @@ The lookup returns:
 
 Each returned issuer includes metadata for the issuer and metadata for the registry in which the issuer was registered.
 
-Here is an example lookup response for a DID that is registered in two registries, and that 
+Here is an example lookup response for a DID that is registered in one legacy registry, one OIDF regsitry, and also lists one registry that couldn't checked for some reason (e.g., the server was down):
 
 ```json
 {
-  matchingIssuers: [
-    {
-      issuer: {
-        federation_entity: {
-          organization_name: 'OneUni University',
-          homepage_uri: 'https://oneuni.edu',
-          logo_uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAB4SURBVEhLY1Da6ENTNGoBQTRqAUE0Yixwkq3X5tNgAANBkRlosvgQERbM0OaAmAwFNLFAkMNdW2KGkwjIE1S3AIFGLSCIRi0giEYtwIHq5Tk0BCEIaDwIwLh89RiKMRBRFkDNxQBUsoAyNGoBQTRqAUE01C3Y6AMAsDxJowXOs6oAAAAASUVORK5CYII='
+    "matchingIssuers": [
+      {
+        "issuer": {
+          "federation_entity": {
+            "organization_name": "OneUni University",
+            "homepage_uri": "https://oneuni.edu",
+            "logo_uri": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAB4SURBVEhLY1Da6ENTNGoBQTRqAUE0Yixwkq3X5tNgAANBkRlosvgQERbM0OaAmAwFNLFAkMNdW2KGkwjIE1S3AIFGLSCIRi0giEYtwIHq5Tk0BCEIaDwIwLh89RiKMRBRFkDNxQBUsoAyNGoBQTRqAUE01C3Y6AMAsDxJowXOs6oAAAAASUVORK5CYII="
+          },
+          "institution_additional_information": {
+            "legal_name": "Board and Trustees of OneUni University"
+          },
+          "credential_registry_entity": {
+            "ctid": "ce-e8a41a52-6ff6-48f0-9872-889c87b093b7",
+            "ce_url": "https://credentialengineregistry.org/resources/ce-e8a41a52-6ff6-48f0-9872-889c87b093b7"
+          },
+          "ror_entity": {
+            "rorid": "042nb2s44",
+            "ror_url": "https://ror.org/042nb2s44"
+          }
         },
-        institution_additional_information: {
-          legal_name: 'Board and Trustees of OneUni University'
-        },
-        credential_registry_entity: {
-          ctid: 'ce-e8a41a52-6ff6-48f0-9872-889c87b093b7',
-          ce_url: 'https://credentialengineregistry.org/resources/ce-e8a41a52-6ff6-48f0-9872-889c87b093b7'
-        },
-        ror_entity: {
-          rorid: '042nb2s44',
-          ror_url: 'https://ror.org/042nb2s44'
-        }
-
-      },
-      registry: {
-        type: 'oidf',
-        fetchEndpoint: 'https://test.registry.dcconsortium.org/fetch?sub=',
-        name: 'DCC Member Registry'
-      }
-    },
-    {
-      issuer: {
-        federation_entity: {
-          organization_name: 'Issuer Registry Client test',
-          homepage_uri: 'https://dcconsortium.org/',
-          location: 'here'
+        "registry": {
+          "type": "oidf",
+          "fetchEndpoint": "https://test.registry.dcconsortium.org/fetch?sub=",
+          "name": "DCC Member Registry"
         }
       },
-      registry: {
-        type: 'dcc-legacy',
-        name: 'DCC Community Registry',
-        url: 'https://digitalcredentials.github.io/community-registry/registry.json'
+      {
+        "issuer": {
+          "federation_entity": {
+            "organization_name": "Issuer Registry Client test",
+            "homepage_uri": "https://dcconsortium.org/",
+            "location": "here"
+          }
+        },
+        "registry": {
+          "type": "dcc-legacy",
+          "name": "DCC Community Registry",
+          "url": "https://digitalcredentials.github.io/community-registry/registry.json"
+        }
       }
-    }
-  ],
-  uncheckedRegistries: []
-}
+    ],
+    "uncheckedRegistries": [
+      {
+        "type": "oidf",
+        "fetchEndpoint": "https://registryyyyy.dcconsortium.org/fetch?sub=",
+        "name": "DCC Member Registry Not Real"
+      }
+    ]
+  }
 ```
-
-
-
-```
-Looking up a DID that isn't registered will return a 404 http status code.
-
 
 ## Contribute
 
