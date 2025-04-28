@@ -12,7 +12,7 @@ import { jwtDecode } from 'jwt-decode'
  *   "type": "dcc-legacy",
  *   "name": "DCC Sandbox Registry",
  *   "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json",
- *   "checked": false
+ *   "unchecked": true
  * }
  * ```
  */

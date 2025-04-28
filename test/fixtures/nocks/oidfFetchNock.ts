@@ -14,9 +14,29 @@ export const dccOidfNockB = (): void => {
     .reply(200, oidfFetchResponseB)
 }
 
+export const dcc2OidfNockB = (): void => {
+  nock('https://registry.dcconsortium.org')
+    .get('/fetch?sub=did:web:twotr.testschool.edu')
+    .reply(200, oidfFetchResponseB)
+}
+
 export const dccOidf404Nock = (): void => {
   // this nock returns a 404 (no DID found) result from the oidf registry
   nock('https://test.registry.dcconsortium.org')
+    .get('/fetch?sub=did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
+    .reply(404)
+}
+
+export const dcc2oidf404ForAllNock = (): void => {
+  // this nock returns a 404 (no DID found) result from the oidf registry
+  nock('https://registry.dcconsortium.org')
+    .get(uri => uri.includes('fetch'))
+    .reply(404)
+}
+
+export const dcc2Oidf404Nock = (): void => {
+  // this nock returns a 404 (no DID found) result from the oidf registry
+  nock('https://registry.dcconsortium.org')
     .get('/fetch?sub=did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
     .reply(404)
 }

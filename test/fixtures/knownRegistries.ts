@@ -5,6 +5,11 @@ export const knownRegistries = [
     name: 'DCC Member Registry'
   },
   {
+    type: 'oidf',
+    fetchEndpoint: 'https://registry.dcconsortium.org/fetch?sub=',
+    name: 'DCC Member Registry 2'
+  },
+  {
     type: 'dcc-legacy',
     name: 'DCC Sandbox Registry',
     url: 'https://digitalcredentials.github.io/sandbox-registry/registry.json'
