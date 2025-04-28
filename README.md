@@ -129,7 +129,7 @@ The lookup returns:
 
 Each returned issuer includes metadata for the issuer and metadata for the registry in which the issuer was registered.
 
-Here is an example lookup response for a DID that is registered in two registries:
+Here is an example lookup response for a DID that is registered in two registries, and that 
 
 ```json
 {
