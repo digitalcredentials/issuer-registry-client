@@ -13,3 +13,9 @@ export const communityRegistryNock = (): void => {
     .get('/community-registry/registry.json')
     .reply(200, communityRegistryResponse)
 }
+
+export const communityRegistry404Nock = (): void => {
+  nock('https://digitalcredentials.github.io')
+    .get('/community-registry/registryyyyyy.json')
+    .reply(404)
+}

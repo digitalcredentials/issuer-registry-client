@@ -79,10 +79,14 @@ export class RegistryClient {
         if (registry.type === 'oidf') {
           try {
             const response = await fetch(`${registry.fetchEndpoint as string}${did}`)
-            if (response.status !== 404) {
+            if (response.status === 200) {
               const jwtToken = await response.text()
               const decodedJWT: { metadata: any } = jwtDecode(jwtToken)
               issuer = decodedJWT.metadata
+            } else if (response.status === 404) {
+              // do nothing, not found
+            } else {
+              registry.unchecked = true
             }
           } catch (e) {
             console.log(`error calling oidf endpoint: ${registry.fetchEndpoint as string}`)

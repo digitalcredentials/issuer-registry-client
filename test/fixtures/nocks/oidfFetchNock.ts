@@ -40,3 +40,12 @@ export const dcc2Oidf404Nock = (): void => {
     .get('/fetch?sub=did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
     .reply(404)
 }
+
+export const badDccOidf404Nock = (): void => {
+  // this nock returns a 404 (no DID found) result from the oidf registry
+  nock('https://registryyyyy.dcconsortium.org')
+    .get('/fetch?sub=did:web:oneuni.testuni.edu')
+    .reply(400)
+}
+
+
