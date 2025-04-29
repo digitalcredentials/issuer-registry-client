@@ -22,6 +22,7 @@ export const uncheckedOIDFRegistry = {
         "registry": {
           "type": "oidf",
           "fetchEndpoint": "https://test.registry.dcconsortium.org/fetch?sub=",
+          "trustAnchorEC": "https://test.registry.dcconsortium.org/.well-known/openid-federation",
           "name": "DCC Member Registry"
         }
       },
@@ -44,6 +45,7 @@ export const uncheckedOIDFRegistry = {
       {
         "type": "oidf",
         "fetchEndpoint": "https://registryyyyy.dcconsortium.org/fetch?sub=",
+        "trustAnchorEC": "https://registryyyyy.dcconsortium.org/.well-known/openid-federation",
         "name": "DCC Member Registry Not Real"
       }
     ]

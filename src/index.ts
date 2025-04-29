@@ -86,7 +86,6 @@ export class RegistryClient {
             if (lookupResponse.status === 200) {
               const jwtToken = await lookupResponse.text()
               const decodedJWT: { metadata: any } = jwtDecode(jwtToken)
-              console.log(jwtToken)
               issuer = decodedJWT.metadata
             } else if (lookupResponse.status === 404) {
               // do nothing, did wasn't found
