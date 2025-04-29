@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { RegistryClient } from '../src/index.js'
-import { dccOidfNockA, dccOidfNockB, dccOidf404Nock, dcc2OidfNockB, dcc2Oidf404Nock, dcc2oidf404ForAllNock, badDccOidf404Nock } from './fixtures/nocks/oidfFetchNock.js'
+import { dccOidfNockTestA, dccOidfNockTestB, dccOidf404TestCNock, dccOidfNockProdB, dccOidf404ProdCNock, dccOidf404ForAllProdNock, badDccOidf404Nock } from './fixtures/nocks/oidfFetchNock.js'
 import { sandboxRegistryNock, communityRegistryNock, communityRegistry404Nock as badCommunityRegistry404Nock } from './fixtures/nocks/legacyRegistryNocks.js'
 import { knownRegistries } from './fixtures/knownRegistries.js'
 import { doubleOIDFResult, singleOIDFResult } from './fixtures/didLookupResults/oidfResultB.js'
@@ -8,18 +8,21 @@ import { doubleLegacyResult } from './fixtures/didLookupResults/doubleLegacyResu
 import { mixedResult } from './fixtures/didLookupResults/mixedResult.js'
 import { mixedResultWithUncheckedRegistry } from './fixtures/didLookupResults/mixedResultWithUncheckedRegistry.js'
 import { uncheckedOIDFRegistry } from './fixtures/didLookupResults/mixedWithUncheckedOIDFRegistry.js'
-import { oidfECResponseDCCNock, oidfECResponseDCCTestNock } from './fixtures/nocks/oidfECNocks.js'
+import { oidfECResponseDCCNock as oidfECResponseDCCProdNock, oidfECResponseDCCTestNock } from './fixtures/nocks/oidfECNocks.js'
 import { doubleOIDFResultB } from './fixtures/didLookupResults/doubleOidfResultB.js'
 
 describe('registry client', () => {
 
   it('returns two matching oidf results', async () => {
-    // nocks for the two entity configuration calls:
-    oidfECResponseDCCNock()
+    // nocks for the two entity configuration calls,
+    // one to each dcc oidf registry, test and prod
+    oidfECResponseDCCProdNock()
     oidfECResponseDCCTestNock()
-    // nocks 
-    dcc2OidfNockB()
-    dccOidfNockB()
+    // nocks for the calls to oidf fetch endpoint
+    // on the test and prod dcc oidf registries,
+    // both searching for the 'B' did:web
+    dccOidfNockProdB()
+    dccOidfNockTestB()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
@@ -28,10 +31,10 @@ describe('registry client', () => {
 
   it('returns one matching oidf result', async () => {
         // nocks for the two entity configuration calls:
-        oidfECResponseDCCNock()
+        oidfECResponseDCCProdNock()
         oidfECResponseDCCTestNock()
-    dccOidfNockB()
-    dcc2oidf404ForAllNock()
+    dccOidfNockTestB()
+    dccOidf404ForAllProdNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
@@ -41,12 +44,12 @@ describe('registry client', () => {
 
   it('returns two matching legacy results', async () => {
             // nocks for the two entity configuration calls:
-            oidfECResponseDCCNock()
+            oidfECResponseDCCProdNock()
             oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
-    dccOidf404Nock()
-    dcc2Oidf404Nock()
+    dccOidf404TestCNock()
+    dccOidf404ProdCNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
@@ -55,12 +58,12 @@ describe('registry client', () => {
 
   it('returns a legacy and 1 oidf results', async () => {
             // nocks for the two entity configuration calls:
-            oidfECResponseDCCNock()
+            oidfECResponseDCCProdNock()
             oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
-    dccOidfNockA()
-    dcc2oidf404ForAllNock()
+    dccOidfNockTestA()
+    dccOidf404ForAllProdNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
@@ -69,12 +72,12 @@ describe('registry client', () => {
 
   it('returns two matching oidf results', async () => {
          // nocks for the two entity configuration calls:
-         oidfECResponseDCCNock()
+         oidfECResponseDCCProdNock()
          oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
-    dccOidfNockB()
-    dcc2OidfNockB()
+    dccOidfNockTestB()
+    dccOidfNockProdB()
     // need to:
     // - add another oidf endpoint to the registry file.
     // - set up a nock for it that matches the same did as nockB.
@@ -86,12 +89,12 @@ describe('registry client', () => {
 
   it('lists a legacy registry as unchecked when unavailable', async () => {
          // nocks for the two entity configuration calls:
-         oidfECResponseDCCNock()
+         oidfECResponseDCCProdNock()
          oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
-    dccOidfNockA()
-    dcc2oidf404ForAllNock()
+    dccOidfNockTestA()
+    dccOidf404ForAllProdNock()
     badCommunityRegistry404Nock()
     const client = new RegistryClient()
     // make a copy of our registry list
@@ -109,12 +112,12 @@ describe('registry client', () => {
 
   it('lists an oidf registry as unchecked when unavailable', async () => {
          // nocks for the two entity configuration calls:
-         oidfECResponseDCCNock()
+         oidfECResponseDCCProdNock()
          oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
-    dccOidfNockA()
-    dcc2oidf404ForAllNock()
+    dccOidfNockTestA()
+    dccOidf404ForAllProdNock()
     badDccOidf404Nock()
     const client = new RegistryClient()
     // make a copy of our registry list
