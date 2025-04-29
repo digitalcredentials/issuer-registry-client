@@ -8,9 +8,26 @@ import { doubleLegacyResult } from './fixtures/didLookupResults/doubleLegacyResu
 import { mixedResult } from './fixtures/didLookupResults/mixedResult.js'
 import { mixedResultWithUncheckedRegistry } from './fixtures/didLookupResults/mixedResultWithUncheckedRegistry.js'
 import { uncheckedOIDFRegistry } from './fixtures/didLookupResults/mixedWithUncheckedOIDFRegistry.js'
+import { oidfECResponseDCCNock, oidfECResponseDCCTestNock } from './fixtures/nocks/oidfECNocks.js'
+import { doubleOIDFResultB } from './fixtures/didLookupResults/doubleOidfResultB.js'
 
 describe('registry client', () => {
-  it('returns one matching oidf result', async () => {
+
+  it('display console output', async () => {
+    // nocks for the two entity configuration calls:
+    oidfECResponseDCCNock()
+    oidfECResponseDCCTestNock()
+    // nocks 
+    dcc2OidfNockB()
+    dccOidfNockB()
+    const client = new RegistryClient()
+    client.use({ registries: knownRegistries })
+    const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
+    console.log(JSON.stringify(result,null,2))
+    expect(result).to.deep.equal(doubleOIDFResultB)
+  })
+
+  it.only('returns one matching oidf result', async () => {
     dccOidfNockB()
     dcc2oidf404ForAllNock()
     const client = new RegistryClient()
