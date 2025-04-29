@@ -21,6 +21,7 @@ export interface Registry {
   name: string
   url?: string
   fetchEndpoint?: string
+  trustAnchorEC?: string
   unchecked?: boolean
 }
 
@@ -78,13 +79,17 @@ export class RegistryClient {
         let issuer
         if (registry.type === 'oidf') {
           try {
-            const response = await fetch(`${registry.fetchEndpoint as string}${did}`)
-            if (response.status === 200) {
-              const jwtToken = await response.text()
+            const ecResponse = await fetch(`${registry.trustAnchorEC as string}`)
+            const entityConfigJWT = await ecResponse.text()
+            const entityConfig: { metadata: any } = jwtDecode(entityConfigJWT)
+            const lookupResponse = await fetch(`${entityConfig.metadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`)
+            if (lookupResponse.status === 200) {
+              const jwtToken = await lookupResponse.text()
               const decodedJWT: { metadata: any } = jwtDecode(jwtToken)
+              console.log(jwtToken)
               issuer = decodedJWT.metadata
-            } else if (response.status === 404) {
-              // do nothing, not found
+            } else if (lookupResponse.status === 404) {
+              // do nothing, did wasn't found
             } else {
               registry.unchecked = true
             }
