@@ -13,7 +13,7 @@ import { doubleOIDFResultB } from './fixtures/didLookupResults/doubleOidfResultB
 
 describe('registry client', () => {
 
-  it('display console output', async () => {
+  it('returns two matching oidf results', async () => {
     // nocks for the two entity configuration calls:
     oidfECResponseDCCNock()
     oidfECResponseDCCTestNock()
@@ -23,20 +23,26 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
-    console.log(JSON.stringify(result,null,2))
     expect(result).to.deep.equal(doubleOIDFResultB)
   })
 
-  it.only('returns one matching oidf result', async () => {
+  it('returns one matching oidf result', async () => {
+        // nocks for the two entity configuration calls:
+        oidfECResponseDCCNock()
+        oidfECResponseDCCTestNock()
     dccOidfNockB()
     dcc2oidf404ForAllNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
+    console.log(JSON.stringify(result,null,2))
     expect(result).to.deep.equal(singleOIDFResult)
   })
 
   it('returns two matching legacy results', async () => {
+            // nocks for the two entity configuration calls:
+            oidfECResponseDCCNock()
+            oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
     dccOidf404Nock()
@@ -48,6 +54,9 @@ describe('registry client', () => {
   })
 
   it('returns a legacy and 1 oidf results', async () => {
+            // nocks for the two entity configuration calls:
+            oidfECResponseDCCNock()
+            oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
     dccOidfNockA()
@@ -59,6 +68,9 @@ describe('registry client', () => {
   })
 
   it('returns two matching oidf results', async () => {
+         // nocks for the two entity configuration calls:
+         oidfECResponseDCCNock()
+         oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
     dccOidfNockB()
@@ -69,11 +81,13 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
-    console.log(JSON.stringify(result,null,2))
     expect(result).to.deep.equal(doubleOIDFResult)
   })
 
   it('lists a legacy registry as unchecked when unavailable', async () => {
+         // nocks for the two entity configuration calls:
+         oidfECResponseDCCNock()
+         oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
     dccOidfNockA()
@@ -90,11 +104,13 @@ describe('registry client', () => {
     })
     client.use({ registries: registriesWithUnavaibleRegistry })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    console.log(JSON.stringify(result,null,2))
     expect(result).to.deep.equal(mixedResultWithUncheckedRegistry)
   })
 
   it('lists an oidf registry as unchecked when unavailable', async () => {
+         // nocks for the two entity configuration calls:
+         oidfECResponseDCCNock()
+         oidfECResponseDCCTestNock()
     sandboxRegistryNock()
     communityRegistryNock()
     dccOidfNockA()
@@ -105,9 +121,10 @@ describe('registry client', () => {
     const registriesWithUnavaibleRegistry = JSON.parse(JSON.stringify(knownRegistries))
     // and add a registry whose fetch endpoint doesn't resolve:
     registriesWithUnavaibleRegistry.push({
-      type: 'oidf',
-      fetchEndpoint: 'https://registryyyyy.dcconsortium.org/fetch?sub=',
-      name: 'DCC Member Registry Not Real'
+      "type": "oidf",
+      "fetchEndpoint": "https://registryyyyy.dcconsortium.org/fetch?sub=",
+      "trustAnchorEC": "https://registryyyyy.dcconsortium.org/.well-known/openid-federation",
+      "name": "DCC Member Registry Not Real"
     })
     client.use({ registries: registriesWithUnavaibleRegistry })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')

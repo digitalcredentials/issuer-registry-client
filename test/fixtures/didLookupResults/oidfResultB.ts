@@ -13,7 +13,8 @@ export const singleOIDFResult = {
       registry: {
         type: 'oidf',
         fetchEndpoint: 'https://test.registry.dcconsortium.org/fetch?sub=',
-        name: 'DCC Member Registry'
+        name: 'DCC Member Registry',
+        trustAnchorEC: 'https://test.registry.dcconsortium.org/.well-known/openid-federation'
       }
     }
   ],
@@ -33,6 +34,7 @@ export const doubleOIDFResult = {
       "registry": {
         "type": "oidf",
         "fetchEndpoint": "https://test.registry.dcconsortium.org/fetch?sub=",
+        "trustAnchorEC": "https://test.registry.dcconsortium.org/.well-known/openid-federation",
         "name": "DCC Member Registry"
       }
     },
@@ -47,6 +49,7 @@ export const doubleOIDFResult = {
       "registry": {
         "type": "oidf",
         "fetchEndpoint": "https://registry.dcconsortium.org/fetch?sub=",
+        "trustAnchorEC": "https://registry.dcconsortium.org/.well-known/openid-federation",
         "name": "DCC Member Registry 2"
       }
     }

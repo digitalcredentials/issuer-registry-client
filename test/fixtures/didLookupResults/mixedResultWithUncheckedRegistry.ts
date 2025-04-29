@@ -22,6 +22,7 @@ export const mixedResultWithUncheckedRegistry = {
         "registry": {
           "type": "oidf",
           "fetchEndpoint": "https://test.registry.dcconsortium.org/fetch?sub=",
+          "trustAnchorEC": "https://test.registry.dcconsortium.org/.well-known/openid-federation",
           "name": "DCC Member Registry"
         }
       },
