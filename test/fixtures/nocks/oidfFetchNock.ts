@@ -47,5 +47,3 @@ export const badDccOidf404Nock = (): void => {
     .get('/fetch?sub=did:web:oneuni.testuni.edu')
     .reply(400)
 }
-
-
