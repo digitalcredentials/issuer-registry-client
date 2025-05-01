@@ -44,7 +44,7 @@ export interface IssuerMetaData {
   location: string
 }
 
-interface RegistryResult {
+interface LegacyRegistryResult {
   registry: { [key: string]: IssuerMetaData }
 }
 
@@ -102,7 +102,7 @@ export class RegistryClient {
         } else if (registry.type === 'dcc-legacy') {
           try {
             const response = await fetch(registry.url as string)
-            const listOfIssuersByDID = await response.json() as RegistryResult
+            const listOfIssuersByDID = await response.json() as LegacyRegistryResult
             const entry = listOfIssuersByDID.registry[did]
             if (typeof entry !== 'undefined' && entry !== null) {
               issuer = {
