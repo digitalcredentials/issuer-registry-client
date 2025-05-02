@@ -20,9 +20,7 @@ export interface Registry {
   type: 'oidf' | 'dcc-legacy'
   name: string
   url?: string
-  fetchEndpoint?: string
   trustAnchorEC?: string
-  unchecked?: boolean
 }
 
 /**
@@ -65,7 +63,7 @@ export class RegistryClient {
    * @param registries - an array of registries to load
    */
 
-  // 'registries' will likely have been gotten with: fetch("https://github.com/digitalcredentials/known-registries/list.json");
+  // see fetch("https://github.com/digitalcredentials/known-registries/list.json") for an example of 'registries'
 
   use ({ registries }: { registries: any }): void {
     this.#registries = registries
@@ -74,56 +72,77 @@ export class RegistryClient {
   async lookupIssuersFor (did: string): Promise<LookupResult> {
     // loop over all the registries, looking up the DID in each registry:
     const allRegistryLookups = await Promise.all(
-      this.#registries.map(async (registry: Registry) => {
-        // registry.checked = false
+      this.#registries.map(async (registryEntry: Registry) => {
         let issuer
-        if (registry.type === 'oidf') {
+        let registry
+        let unchecked
+        if (registryEntry.type === 'oidf') {
           try {
-            const ecResponse = await fetch(`${registry.trustAnchorEC as string}`)
+            const ecResponse = await fetch(`${registryEntry.trustAnchorEC as string}`)
             const entityConfigJWT = await ecResponse.text()
             const entityConfig: { metadata: any } = jwtDecode(entityConfigJWT)
-            const lookupResponse = await fetch(`${entityConfig.metadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`)
+            const registryMetadata = entityConfig.metadata
+            const lookupResponse = await fetch(`${registryMetadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`)
             if (lookupResponse.status === 200) {
-              const jwtToken = await lookupResponse.text()
-              const decodedJWT: { metadata: any } = jwtDecode(jwtToken)
-              issuer = decodedJWT.metadata
+              const issuerResultJWT = await lookupResponse.text()
+              const issuerResults: { metadata: any } = jwtDecode(issuerResultJWT)
+              issuer = issuerResults.metadata
+              registry = registryMetadata;
             } else if (lookupResponse.status === 404) {
-              // do nothing, did wasn't found
+              // did wasn't found, so do nothing - simply leave the issuer empty, which
+              // we'll later filter out of the results
             } else {
-              registry.unchecked = true
+              // couldn't check the registry for some reason so return as unchecked
+              unchecked = registryEntry
             }
           } catch (e) {
-            console.log(`error calling oidf endpoint: ${registry.fetchEndpoint as string}`)
+            console.log(`error accessing oidf registry: ${registryEntry.trustAnchorEC as string}`)
             console.log(e)
-            registry.unchecked = true
+            // couldn't check the registry for some reason so return as unchecked
+            unchecked = registryEntry
           }
-          // maybe validate the JWT?
-          // likely transform the returned oidf entity statement into some simpler common form
-        } else if (registry.type === 'dcc-legacy') {
+          // TODO: could validate the JWT
+
+        } else if (registryEntry.type === 'dcc-legacy') {
           try {
-            const response = await fetch(registry.url as string)
+            const response = await fetch(registryEntry.url as string)
             const listOfIssuersByDID = await response.json() as LegacyRegistryResult
-            const entry = listOfIssuersByDID.registry[did]
-            if (typeof entry !== 'undefined' && entry !== null) {
+            const matchingIssuer = listOfIssuersByDID.registry[did]
+            if (typeof matchingIssuer !== 'undefined' && matchingIssuer !== null) {
               issuer = {
                 federation_entity: {
-                  organization_name: entry.name,
-                  homepage_uri: entry.url,
-                  location: entry.location
+                  organization_name: matchingIssuer.name,
+                  homepage_uri: matchingIssuer.url,
+                  location: matchingIssuer.location
                 }
-              }
+              };
+              registry = {
+                type: "dcc-legacy",
+                federation_entity: {
+                    organization_name: registryEntry.name
+                },
+                institution_additional_information: {
+                    "legacy_list": registryEntry.url
+                }
+              };
             }
           } catch (e) {
-            console.log(`error retrieving registry from endpoint: ${registry.fetchEndpoint as string}`)
+            console.log(`error retrieving registry from endpoint: ${registryEntry.url as string}`)
             console.log(e)
-            registry.unchecked = true
+            unchecked = registryEntry
           }
         }
-        return { issuer, registry }
+        return { issuer, registry, unchecked}
       })
     )
-    const uncheckedRegistries = allRegistryLookups.filter(lookup => lookup.registry.unchecked).map(lookup => { delete lookup.registry.unchecked; return lookup.registry })
-    const matchingIssuers = allRegistryLookups.filter(lookup => lookup.issuer)
+    // pull out any results where we couldn't check the registry
+    const uncheckedRegistries = allRegistryLookups
+      .filter(lookup => typeof lookup.unchecked !== 'undefined' )
+      .map(lookup => {return lookup.unchecked}) as Registry[]
+    // only return a match for a lookup when there is a value for 'issuer':
+    const matchingIssuers = allRegistryLookups
+      .filter(lookup => lookup.issuer)
+      .map(lookup => {return {issuer: lookup.issuer, registry: lookup.registry}})
     return { matchingIssuers, uncheckedRegistries }
   }
 
