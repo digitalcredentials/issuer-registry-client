@@ -37,7 +37,7 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
-    console.log(JSON.stringify(result, null, 2))
+    
     expect(result).to.deep.equal(singleOIDFResult)
   })
 
@@ -121,16 +121,14 @@ describe('registry client', () => {
     const client = new RegistryClient()
     // make a copy of our registry list
     const registriesWithUnavaibleRegistry = JSON.parse(JSON.stringify(knownRegistries))
-    // and add a registry whose fetch endpoint doesn't resolve:
+    // and add a registry whose EC endpoint doesn't resolve:
     registriesWithUnavaibleRegistry.push({
       type: 'oidf',
-      fetchEndpoint: 'https://registryyyyy.dcconsortium.org/fetch?sub=',
       trustAnchorEC: 'https://registryyyyy.dcconsortium.org/.well-known/openid-federation',
       name: 'DCC Member Registry Not Real'
     })
     client.use({ registries: registriesWithUnavaibleRegistry })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    console.log(JSON.stringify(result, null, 2))
     expect(result).to.deep.equal(uncheckedOIDFRegistry)
   })
 })
