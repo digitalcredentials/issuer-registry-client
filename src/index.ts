@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode'
+import {jwtDecode} from './jwtDecode.js'
 
 /*!
  * Copyright (c) 2025 Digital Credentials Consortium. All rights reserved.

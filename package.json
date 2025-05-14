@@ -24,6 +24,9 @@
   "type": "module",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "react-native": {
+    "./jwtDecode.js": "./jwtDecode-reactnative.js"
+  },
   "dependencies": {
     "@digitalcredentials/http-client": "^5.0.2",
     "jwt-decode": "^4.0.0"
