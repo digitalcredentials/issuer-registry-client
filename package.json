@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@digitalcredentials/http-client": "^5.0.2",
+    "core-js": "^3.42.0",
     "jwt-decode": "^4.0.0"
   },
   "devDependencies": {
