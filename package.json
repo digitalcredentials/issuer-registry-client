@@ -1,7 +1,7 @@
 {
   "name": "@digitalcredentials/issuer-registry-client",
   "description": "Known issuers / verifiers registry client, for use in Typescript, browser, and React Native.",
-  "version": "3.2.0-beta.4",
+  "version": "3.2.0-beta.5",
   "scripts": {
     "build-esm": "tsc -p tsconfig.esm.json",
     "build-types": "tsc -p tsconfig.types.json",
@@ -25,7 +25,7 @@
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "react-native": {
-    "./jwtDecode.js": "./jwtDecode-reactnative.js"
+    "./dist/jwtDecode.js": "./dist/jwtDecode-reactNative.js"
   },
   "dependencies": {
     "@digitalcredentials/http-client": "^5.0.2",
