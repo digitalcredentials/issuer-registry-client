@@ -1,4 +1,4 @@
-import {jwtDecode} from './jwtDecode.js'
+import { jwtDecode } from './jwtDecode.js'
 
 /*!
  * Copyright (c) 2025 Digital Credentials Consortium. All rights reserved.
@@ -87,7 +87,7 @@ export class RegistryClient {
               const issuerResultJWT = await lookupResponse.text()
               const issuerResults: { metadata: any } = jwtDecode(issuerResultJWT)
               issuer = issuerResults.metadata
-              registry = registryMetadata;
+              registry = registryMetadata
             } else if (lookupResponse.status === 404) {
               // did wasn't found, so do nothing - simply leave the issuer empty, which
               // we'll later filter out of the results
@@ -102,7 +102,6 @@ export class RegistryClient {
             unchecked = registryEntry
           }
           // TODO: could validate the JWT
-
         } else if (registryEntry.type === 'dcc-legacy') {
           try {
             const response = await fetch(registryEntry.url as string)
@@ -115,16 +114,16 @@ export class RegistryClient {
                   homepage_uri: matchingIssuer.url,
                   location: matchingIssuer.location
                 }
-              };
+              }
               registry = {
-                type: "dcc-legacy",
+                type: 'dcc-legacy',
                 federation_entity: {
-                    organization_name: registryEntry.name
+                  organization_name: registryEntry.name
                 },
                 institution_additional_information: {
-                    "legacy_list": registryEntry.url
+                  legacy_list: registryEntry.url
                 }
-              };
+              }
             }
           } catch (e) {
             console.log(`error retrieving registry from endpoint: ${registryEntry.url as string}`)
@@ -132,17 +131,17 @@ export class RegistryClient {
             unchecked = registryEntry
           }
         }
-        return { issuer, registry, unchecked}
+        return { issuer, registry, unchecked }
       })
     )
     // pull out any results where we couldn't check the registry
     const uncheckedRegistries = allRegistryLookups
-      .filter(lookup => typeof lookup.unchecked !== 'undefined' )
-      .map(lookup => {return lookup.unchecked}) as Registry[]
+      .filter(lookup => typeof lookup.unchecked !== 'undefined')
+      .map(lookup => { return lookup.unchecked }) as Registry[]
     // only return a match for a lookup when there is a value for 'issuer':
     const matchingIssuers = allRegistryLookups
       .filter(lookup => lookup.issuer)
-      .map(lookup => {return {issuer: lookup.issuer, registry: lookup.registry}})
+      .map(lookup => { return { issuer: lookup.issuer, registry: lookup.registry } })
     return { matchingIssuers, uncheckedRegistries }
   }
 

@@ -3,9 +3,9 @@
 // See the 'react-native' property in package.json
 // And we override so we can shim in the atob function,
 // which is required by jwtDecode, but not available in react-native
-import "core-js/stable/atob";
+import 'core-js/stable/atob'
 import { jwtDecode as decode } from 'jwt-decode'
 
-export const jwtDecode = (token:string) => {
-    return decode(token);
-}  
+export const jwtDecode = (token: string) => {
+  return decode(token)
+}

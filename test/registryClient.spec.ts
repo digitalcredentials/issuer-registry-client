@@ -37,7 +37,7 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
-    
+
     expect(result).to.deep.equal(singleOIDFResult)
   })
 
