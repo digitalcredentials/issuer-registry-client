@@ -1,137 +1,151 @@
+import { jwtDecode } from './jwtDecode.js'
+
 /*!
- * Copyright (c) 2023 Digital Credentials Consortium. All rights reserved.
+ * Copyright (c) 2025 Digital Credentials Consortium. All rights reserved.
  */
-import { httpClient } from '@digitalcredentials/http-client'
 
 /**
- * Example registry:
+ * Example registry entry:
  * @example
  * ```
  * {
+ *   "type": "dcc-legacy",
  *   "name": "DCC Sandbox Registry",
- *   "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
+ *   "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json",
+ *   "unchecked": true
  * }
  * ```
  */
-export class KnownDidRegistry {
-  public name: string
-  public url: string
-
-  constructor (name: string, url: string) {
-    this.name = name
-    this.url = url
-  }
-}
-
-const DID_MAP_REGISTRY_SPEC_V01 = '0.1.0'
-
-export class DidMapRegistry extends KnownDidRegistry {
-  public version: string = DID_MAP_REGISTRY_SPEC_V01
-
-  /**
-   * @example rawContents
-   * {
-   *   did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W: {
-   *     name: "(Example) My University",
-   *     location: "Cambridge, MA, USA",
-   *     url: "https://digitalcredentials.mit.edu"
-   *   }
-   * }
-   */
-  public rawContents?: any
-
-  constructor ({ name, url, rawContents }: { name: string, url: string, rawContents: any[] }) {
-    super(name, url)
-    this.rawContents = rawContents
-  }
+export interface Registry {
+  type: 'oidf' | 'dcc-legacy'
+  name: string
+  url?: string
+  trustAnchorEC?: string
 }
 
 /**
+ * Example issuer metadata:
  * @example
  * ```
- * // did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W
  * {
  *   name: "(Example) My University",
  *   location: "Cambridge, MA, USA",
- *   url: "https://digitalcredentials.mit.edu",
- *   inRegistries: ["DCC Community Registry", "DCC Sandbox Registry"]
+ *   legalName: "The righteous regal institute of reality"
+ *   url: "https://digitalcredentials.mit.edu"
  * }
  * ```
  */
-export class DidMapRegistryEntry {
-  public name: string
-  public url: string
-  public location?: string
-  inRegistries?: Set<KnownDidRegistry> = new Set()
-
-  constructor ({ name, url, location }: { name: string, url: string, location: string }) {
-    this.name = name
-    this.url = url
-    this.location = location
-  }
-}
-
-export interface LoadResult {
+export interface IssuerMetaData {
   name: string
   url: string
-  loaded: boolean
-  error?: any
+  legalName?: string
+  location: string
+}
+
+interface LegacyRegistryResult {
+  registry: { [key: string]: IssuerMetaData }
+}
+
+export interface IssuerMatch {
+  issuer: IssuerMetaData | null
+  registry: Registry
+}
+
+export interface LookupResult {
+  matchingIssuers: IssuerMatch[]
+  uncheckedRegistries: Registry[]
 }
 
 export class RegistryClient {
-  public registries?: DidMapRegistry[]
-  public didMap: Map<string, DidMapRegistryEntry> = new Map()
-
+  #registries: Registry[]
   /**
-   * @example
-   * ```
-   * const config = [
-   *   {
-   *     "name": "DCC Sandbox Registry",
-   *     "url": "https://digitalcredentials.github.io/sandbox-registry/registry.json"
-   *   }
-   * ]
-   * const client = new RegistryClient()
-   * await client.load({ config })
-   * ```
-   * @param registries - Config object with a list of registries to load
+   *
+   * @param registries - an array of registries to load
    */
-  async load ({ config }: { config: any }): Promise<LoadResult[]> {
-    // Clear previous DID map and entries
-    this.didMap = new Map()
-    this.registries = config as DidMapRegistry[]
-    const registryLoadResult = JSON.parse(JSON.stringify(this.registries)) as LoadResult[]
-    await Promise.all(this.registries.map(async (registry) => {
-      const resultEntry = registryLoadResult.find((entry: LoadResult) => entry.url === registry.url)
-      try {
-        // fetch registry contents
-        const contents: any = await httpClient.get(registry.url)
-        registry.rawContents = contents.data.registry
-        // discard contents.meta, not needed at this point
 
-        // cycle through each DID in the registry, add to DID Map
-        for (const did in registry.rawContents) {
-          const entry = new DidMapRegistryEntry(registry.rawContents[did])
-          const existingEntry = this.didMap.get(did)
-          if (existingEntry != null) {
-            existingEntry.inRegistries?.add(registry)
-          } else {
-            entry.inRegistries?.add(registry)
-            this.didMap.set(did, entry)
-          }
-        }
-        if (resultEntry != null) resultEntry.loaded = true
-      } catch (e) {
-        console.log(`Could not load registry from url "${registry.url}":`, e)
-        // no DIDs are added from that registry
-        if (resultEntry != null) resultEntry.loaded = false
-        if (resultEntry != null) resultEntry.error = e
-      }
-    }))
-    return registryLoadResult
+  // see fetch("https://github.com/digitalcredentials/known-registries/list.json") for an example of 'registries'
+
+  use ({ registries }: { registries: any }): void {
+    this.#registries = registries
   }
 
-  didEntry (did: string): DidMapRegistryEntry | undefined {
-    return this.didMap.get(did)
+  async lookupIssuersFor (did: string): Promise<LookupResult> {
+    // loop over all the registries, looking up the DID in each registry:
+    const allRegistryLookups = await Promise.all(
+      this.#registries.map(async (registryEntry: Registry) => {
+        let issuer
+        let registry
+        let unchecked
+        if (registryEntry.type === 'oidf') {
+          try {
+            const ecResponse = await fetch(`${registryEntry.trustAnchorEC as string}`)
+            const entityConfigJWT = await ecResponse.text()
+            const entityConfig: { metadata: any } = jwtDecode(entityConfigJWT)
+            const registryMetadata = entityConfig.metadata
+            const lookupResponse = await fetch(`${registryMetadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`)
+            if (lookupResponse.status === 200) {
+              const issuerResultJWT = await lookupResponse.text()
+              const issuerResults: { metadata: any } = jwtDecode(issuerResultJWT)
+              issuer = issuerResults.metadata
+              registry = registryMetadata
+            } else if (lookupResponse.status === 404) {
+              // did wasn't found, so do nothing - simply leave the issuer empty, which
+              // we'll later filter out of the results
+            } else {
+              // couldn't check the registry for some reason so return as unchecked
+              unchecked = registryEntry
+            }
+          } catch (e) {
+            console.log(`error accessing oidf registry: ${registryEntry.trustAnchorEC as string}`)
+            console.log(e)
+            // couldn't check the registry for some reason so return as unchecked
+            unchecked = registryEntry
+          }
+          // TODO: could validate the JWT
+        } else if (registryEntry.type === 'dcc-legacy') {
+          try {
+            const response = await fetch(registryEntry.url as string)
+            const listOfIssuersByDID = await response.json() as LegacyRegistryResult
+            const matchingIssuer = listOfIssuersByDID.registry[did]
+            if (typeof matchingIssuer !== 'undefined' && matchingIssuer !== null) {
+              issuer = {
+                federation_entity: {
+                  organization_name: matchingIssuer.name,
+                  homepage_uri: matchingIssuer.url,
+                  location: matchingIssuer.location
+                }
+              }
+              registry = {
+                type: 'dcc-legacy',
+                federation_entity: {
+                  organization_name: registryEntry.name
+                },
+                institution_additional_information: {
+                  legacy_list: registryEntry.url
+                }
+              }
+            }
+          } catch (e) {
+            console.log(`error retrieving registry from endpoint: ${registryEntry.url as string}`)
+            console.log(e)
+            unchecked = registryEntry
+          }
+        }
+        return { issuer, registry, unchecked }
+      })
+    )
+    // pull out any results where we couldn't check the registry
+    const uncheckedRegistries = allRegistryLookups
+      .filter(lookup => typeof lookup.unchecked !== 'undefined')
+      .map(lookup => { return lookup.unchecked }) as Registry[]
+    // only return a match for a lookup when there is a value for 'issuer':
+    const matchingIssuers = allRegistryLookups
+      .filter(lookup => lookup.issuer)
+      .map(lookup => { return { issuer: lookup.issuer, registry: lookup.registry } })
+    return { matchingIssuers, uncheckedRegistries }
+  }
+
+  constructor () {
+    this.#registries = []
   }
 }

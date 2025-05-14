@@ -1,7 +1,7 @@
 {
   "name": "@digitalcredentials/issuer-registry-client",
   "description": "Known issuers / verifiers registry client, for use in Typescript, browser, and React Native.",
-  "version": "3.2.0-beta.1",
+  "version": "3.2.0-beta.5",
   "scripts": {
     "build-esm": "tsc -p tsconfig.esm.json",
     "build-types": "tsc -p tsconfig.types.json",
@@ -13,7 +13,7 @@
     "rebuild": "npm run clear && npm run build",
     "test": "npm run lint && npm run test-node",
     "test-karma": "karma start karma.conf.js",
-    "test-node": "npm run build-test && mocha dist/test/*.spec.js"
+    "test-node": "npm run build-test && mocha --timeout 20000 dist/test/*.spec.js"
   },
   "files": [
     "dist",
@@ -24,8 +24,13 @@
   "type": "module",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "react-native": {
+    "./dist/jwtDecode.js": "./dist/jwtDecode-reactNative.js"
+  },
   "dependencies": {
-    "@digitalcredentials/http-client": "^5.0.2"
+    "@digitalcredentials/http-client": "^5.0.2",
+    "core-js": "^3.42.0",
+    "jwt-decode": "^4.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.5",
@@ -44,6 +49,7 @@
     "karma-sourcemap-loader": "^0.4.0",
     "karma-typescript": "^5.5.4",
     "mocha": "^10.2.0",
+    "nock": "^14.0.4",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
     "ts-standard": "^12.0.2",
