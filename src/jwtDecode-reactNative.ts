@@ -6,6 +6,6 @@
 import 'core-js/stable/atob'
 import { jwtDecode as decode } from 'jwt-decode'
 
-export const jwtDecode = (token: string) => {
+export const jwtDecode = (token: string): string => {
   return decode(token)
 }
