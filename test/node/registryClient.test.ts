@@ -1,14 +1,32 @@
-import { expect } from 'chai'
-import { RegistryClient } from '../src/index.js'
-import { dccOidfNockTestA, dccOidfNockTestB, dccOidf404TestCNock, dccOidfNockProdB, dccOidf404ProdCNock, dccOidf404ForAllProdNock, badDccOidf404Nock } from './fixtures/nocks/oidfFetchNock.js'
-import { sandboxRegistryNock, communityRegistryNock, communityRegistry404Nock as badCommunityRegistry404Nock } from './fixtures/nocks/legacyRegistryNocks.js'
+import { describe, it, expect } from 'vitest'
+import { RegistryClient } from '../../src/index.js'
+import {
+  dccOidfNockTestA,
+  dccOidfNockTestB,
+  dccOidf404TestCNock,
+  dccOidfNockProdB,
+  dccOidf404ProdCNock,
+  dccOidf404ForAllProdNock,
+  badDccOidf404Nock
+} from './fixtures/nocks/oidfFetchNock.js'
+import {
+  sandboxRegistryNock,
+  communityRegistryNock,
+  communityRegistry404Nock as badCommunityRegistry404Nock
+} from './fixtures/nocks/legacyRegistryNocks.js'
 import { knownRegistries } from './fixtures/knownRegistries.js'
-import { doubleOIDFResult, singleOIDFResult } from './fixtures/didLookupResults/oidfResultB.js'
+import {
+  doubleOIDFResult,
+  singleOIDFResult
+} from './fixtures/didLookupResults/oidfResultB.js'
 import { doubleLegacyResult } from './fixtures/didLookupResults/doubleLegacyResult.js'
 import { mixedResult } from './fixtures/didLookupResults/mixedResult.js'
 import { mixedResultWithUncheckedRegistry } from './fixtures/didLookupResults/mixedResultWithUncheckedRegistry.js'
 import { uncheckedOIDFRegistry } from './fixtures/didLookupResults/mixedWithUncheckedOIDFRegistry.js'
-import { oidfECResponseDCCNock as oidfECResponseDCCProdNock, oidfECResponseDCCTestNock } from './fixtures/nocks/oidfECNocks.js'
+import {
+  oidfECResponseDCCNock as oidfECResponseDCCProdNock,
+  oidfECResponseDCCTestNock
+} from './fixtures/nocks/oidfECNocks.js'
 import { doubleOIDFResultB } from './fixtures/didLookupResults/doubleOidfResultB.js'
 
 describe('registry client', () => {
@@ -25,7 +43,7 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
-    expect(result).to.deep.equal(doubleOIDFResultB)
+    expect(result).toEqual(doubleOIDFResultB)
   })
 
   it('returns one matching oidf result', async () => {
@@ -38,7 +56,7 @@ describe('registry client', () => {
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
 
-    expect(result).to.deep.equal(singleOIDFResult)
+    expect(result).toEqual(singleOIDFResult)
   })
 
   it('returns two matching legacy results', async () => {
@@ -51,8 +69,10 @@ describe('registry client', () => {
     dccOidf404ProdCNock()
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
-    const result = await client.lookupIssuersFor('did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W')
-    expect(result).to.deep.equal(doubleLegacyResult)
+    const result = await client.lookupIssuersFor(
+      'did:key:z6MkpLDL3RoAoMRTwTgo3rs39ZwssfaPKtGdZw7AGRN7CK4W'
+    )
+    expect(result).toEqual(doubleLegacyResult)
   })
 
   it('returns a legacy and 1 oidf results', async () => {
@@ -66,7 +86,7 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    expect(result).to.deep.equal(mixedResult)
+    expect(result).toEqual(mixedResult)
   })
 
   it('returns two matching oidf results', async () => {
@@ -83,7 +103,7 @@ describe('registry client', () => {
     const client = new RegistryClient()
     client.use({ registries: knownRegistries })
     const result = await client.lookupIssuersFor('did:web:twotr.testschool.edu')
-    expect(result).to.deep.equal(doubleOIDFResult)
+    expect(result).toEqual(doubleOIDFResult)
   })
 
   it('lists a legacy registry as unchecked when unavailable', async () => {
@@ -97,7 +117,9 @@ describe('registry client', () => {
     badCommunityRegistry404Nock()
     const client = new RegistryClient()
     // make a copy of our registry list
-    const registriesWithUnavaibleRegistry = JSON.parse(JSON.stringify(knownRegistries))
+    const registriesWithUnavaibleRegistry = JSON.parse(
+      JSON.stringify(knownRegistries)
+    )
     // and add a registry whose url doesn't resolve:
     registriesWithUnavaibleRegistry.push({
       type: 'dcc-legacy',
@@ -106,7 +128,7 @@ describe('registry client', () => {
     })
     client.use({ registries: registriesWithUnavaibleRegistry })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    expect(result).to.deep.equal(mixedResultWithUncheckedRegistry)
+    expect(result).toEqual(mixedResultWithUncheckedRegistry)
   })
 
   it('lists an oidf registry as unchecked when unavailable', async () => {
@@ -120,16 +142,19 @@ describe('registry client', () => {
     badDccOidf404Nock()
     const client = new RegistryClient()
     // make a copy of our registry list
-    const registriesWithUnavaibleRegistry = JSON.parse(JSON.stringify(knownRegistries))
+    const registriesWithUnavaibleRegistry = JSON.parse(
+      JSON.stringify(knownRegistries)
+    )
     // and add a registry whose EC endpoint doesn't resolve:
     registriesWithUnavaibleRegistry.push({
       type: 'oidf',
-      trustAnchorEC: 'https://registryyyyy.dcconsortium.org/.well-known/openid-federation',
+      trustAnchorEC:
+        'https://registryyyyy.dcconsortium.org/.well-known/openid-federation',
       name: 'DCC Member Registry Not Real'
     })
     client.use({ registries: registriesWithUnavaibleRegistry })
     const result = await client.lookupIssuersFor('did:web:oneuni.testuni.edu')
-    expect(result).to.deep.equal(uncheckedOIDFRegistry)
+    expect(result).toEqual(uncheckedOIDFRegistry)
   })
 })
 

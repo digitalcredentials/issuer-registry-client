@@ -109,12 +109,14 @@ export default {
       location: 'Millcreek, UT, USA',
       url: 'https://www.wgu.edu'
     },
-    'did:web:www.credly.com:api:v1:obi:v3:issuers:ede32dcc-9168-4563-9352-8725936d5231': {
-      name: 'Credly Test OBv3 PM'
-    },
-    'did:web:www.credly.com:api:v1:obi:v3:issuers:e0e2733e-936d-462a-8af0-d14c5fa7fd1a': {
-      name: 'Credly Test OBv3 EDL'
-    },
+    'did:web:www.credly.com:api:v1:obi:v3:issuers:ede32dcc-9168-4563-9352-8725936d5231':
+      {
+        name: 'Credly Test OBv3 PM'
+      },
+    'did:web:www.credly.com:api:v1:obi:v3:issuers:e0e2733e-936d-462a-8af0-d14c5fa7fd1a':
+      {
+        name: 'Credly Test OBv3 EDL'
+      },
     'did:key:z6MkfZq9f2cnn4HbZLQKpmC62fg5S9LpGBhuVqHRkvM6ZyEd': {
       name: 'InnovateUS',
       url: 'https://innovate-us.org'

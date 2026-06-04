@@ -14,7 +14,8 @@ export const doubleLegacyResult = {
           organization_name: 'DCC Sandbox Registry'
         },
         institution_additional_information: {
-          legacy_list: 'https://digitalcredentials.github.io/sandbox-registry/registry.json'
+          legacy_list:
+            'https://digitalcredentials.github.io/sandbox-registry/registry.json'
         }
       }
     },
@@ -32,7 +33,8 @@ export const doubleLegacyResult = {
           organization_name: 'DCC Community Registry'
         },
         institution_additional_information: {
-          legacy_list: 'https://digitalcredentials.github.io/community-registry/registry.json'
+          legacy_list:
+            'https://digitalcredentials.github.io/community-registry/registry.json'
         }
       }
     }

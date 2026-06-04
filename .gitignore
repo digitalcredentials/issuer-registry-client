@@ -114,3 +114,12 @@ dist
 
 # MacOS
 .DS_Store
+
+# Playwright
+/playwright-report
+/test-results
+/blob-report
+/.playwright
+
+# Local spec/planning (gitignored by convention)
+_spec
