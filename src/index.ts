@@ -65,11 +65,11 @@ export class RegistryClient {
 
   // see fetch("https://github.com/digitalcredentials/known-registries/list.json") for an example of 'registries'
 
-  use ({ registries }: { registries: any }): void {
+  use({ registries }: { registries: any }): void {
     this.#registries = registries
   }
 
-  async lookupIssuersFor (did: string): Promise<LookupResult> {
+  async lookupIssuersFor(did: string): Promise<LookupResult> {
     // loop over all the registries, looking up the DID in each registry:
     const allRegistryLookups = await Promise.all(
       this.#registries.map(async (registryEntry: Registry) => {
@@ -78,14 +78,19 @@ export class RegistryClient {
         let unchecked
         if (registryEntry.type === 'oidf') {
           try {
-            const ecResponse = await fetch(`${registryEntry.trustAnchorEC as string}`)
+            const ecResponse = await fetch(
+              `${registryEntry.trustAnchorEC as string}`
+            )
             const entityConfigJWT = await ecResponse.text()
             const entityConfig: { metadata: any } = jwtDecode(entityConfigJWT)
             const registryMetadata = entityConfig.metadata
-            const lookupResponse = await fetch(`${registryMetadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`)
+            const lookupResponse = await fetch(
+              `${registryMetadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`
+            )
             if (lookupResponse.status === 200) {
               const issuerResultJWT = await lookupResponse.text()
-              const issuerResults: { metadata: any } = jwtDecode(issuerResultJWT)
+              const issuerResults: { metadata: any } =
+                jwtDecode(issuerResultJWT)
               issuer = issuerResults.metadata
               registry = registryMetadata
             } else if (lookupResponse.status === 404) {
@@ -96,7 +101,9 @@ export class RegistryClient {
               unchecked = registryEntry
             }
           } catch (e) {
-            console.log(`error accessing oidf registry: ${registryEntry.trustAnchorEC as string}`)
+            console.log(
+              `error accessing oidf registry: ${registryEntry.trustAnchorEC as string}`
+            )
             console.log(e)
             // couldn't check the registry for some reason so return as unchecked
             unchecked = registryEntry
@@ -105,9 +112,13 @@ export class RegistryClient {
         } else if (registryEntry.type === 'dcc-legacy') {
           try {
             const response = await fetch(registryEntry.url as string)
-            const listOfIssuersByDID = await response.json() as LegacyRegistryResult
+            const listOfIssuersByDID =
+              (await response.json()) as LegacyRegistryResult
             const matchingIssuer = listOfIssuersByDID.registry[did]
-            if (typeof matchingIssuer !== 'undefined' && matchingIssuer !== null) {
+            if (
+              typeof matchingIssuer !== 'undefined' &&
+              matchingIssuer !== null
+            ) {
               issuer = {
                 federation_entity: {
                   organization_name: matchingIssuer.name,
@@ -126,7 +137,9 @@ export class RegistryClient {
               }
             }
           } catch (e) {
-            console.log(`error retrieving registry from endpoint: ${registryEntry.url as string}`)
+            console.log(
+              `error retrieving registry from endpoint: ${registryEntry.url as string}`
+            )
             console.log(e)
             unchecked = registryEntry
           }
@@ -137,15 +150,19 @@ export class RegistryClient {
     // pull out any results where we couldn't check the registry
     const uncheckedRegistries = allRegistryLookups
       .filter(lookup => typeof lookup.unchecked !== 'undefined')
-      .map(lookup => { return lookup.unchecked }) as Registry[]
+      .map(lookup => {
+        return lookup.unchecked
+      }) as Registry[]
     // only return a match for a lookup when there is a value for 'issuer':
     const matchingIssuers = allRegistryLookups
       .filter(lookup => lookup.issuer)
-      .map(lookup => { return { issuer: lookup.issuer, registry: lookup.registry } })
+      .map(lookup => {
+        return { issuer: lookup.issuer, registry: lookup.registry }
+      })
     return { matchingIssuers, uncheckedRegistries }
   }
 
-  constructor () {
+  constructor() {
     this.#registries = []
   }
 }
