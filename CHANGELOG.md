@@ -1,6 +1,6 @@
 # `@digitalcredentials/issuer-registry-client` Changelog
 
-## 3.2.0 - TBD
+## 4.0.0 - 2026-06-05
 
 ### Changed
 
@@ -9,6 +9,7 @@
   `tsconfig.json` + `tsconfig.dev.json`, ESLint flat config + Prettier 3, Vitest
   for Node tests, Playwright for browser tests, and updated CI/publish
   workflows. Node.js engine floor raised to `>=24`.
+- Remove unused `http-client` dependency.
 
 ## 3.1.0 - 2025-02-09
 
