@@ -144,6 +144,23 @@ The lookup returns:
 Each returned issuer includes metadata for the issuer and metadata for the
 registry in which the issuer was registered.
 
+### Supplying your own `fetch`
+
+Every registry request goes through `globalThis.fetch` by default. Pass a
+`fetch` of your own to take that over -- to apply a timeout, add headers, serve
+from a cache, or reach a registry the runtime cannot request directly (in a
+browser, one that sends no CORS headers), which would otherwise come back in
+`uncheckedRegistries`:
+
+```js
+const registryClient = new RegistryClient({
+  fetch: async url =>
+    await fetch(`https://gateway.example/fetch?url=${encodeURIComponent(url)}`)
+})
+```
+
+It is called with a URL and returns a `Response`, exactly like `fetch`.
+
 Here is an example lookup response for a DID that is registered in one legacy
 registry, one OIDF regsitry, and also lists one registry that couldn't checked
 for some reason (e.g., the server was down):
