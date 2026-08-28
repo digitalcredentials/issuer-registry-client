@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest'
 import nock from 'nock'
 import { RegistryClient, type RegistryFetch } from '../../src/index.js'
 import { oidfECResponseDCC } from './fixtures/httpResponses/oidfResponses/oidfECResponseDCC.js'
@@ -43,6 +43,14 @@ function nockProxiedGet(target: string, status: number, body?: unknown): void {
 }
 
 describe('injected fetch', () => {
+  beforeAll(() => {
+    nock.disableNetConnect()
+  })
+
+  afterAll(() => {
+    nock.enableNetConnect()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })
