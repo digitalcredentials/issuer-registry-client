@@ -5,6 +5,14 @@ import { jwtDecode } from './jwtDecode.js'
  */
 
 /**
+ * The subset of `fetch` this client needs: a URL in, a `Response` out.
+ * `globalThis.fetch` is the default; injecting one lets a caller add a timeout,
+ * headers, or caching, or reach a registry its runtime cannot request directly
+ * (in a browser, one that sends no CORS headers).
+ */
+export type RegistryFetch = (url: string) => Promise<Response>
+
+/**
  * Example registry entry:
  * @example
  * ```
@@ -58,6 +66,7 @@ export interface LookupResult {
 
 export class RegistryClient {
   #registries: Registry[]
+  readonly #fetch: RegistryFetch
   /**
    *
    * @param registries - an array of registries to load
@@ -78,13 +87,13 @@ export class RegistryClient {
         let unchecked
         if (registryEntry.type === 'oidf') {
           try {
-            const ecResponse = await fetch(
+            const ecResponse = await this.#fetch(
               `${registryEntry.trustAnchorEC as string}`
             )
             const entityConfigJWT = await ecResponse.text()
             const entityConfig: { metadata: any } = jwtDecode(entityConfigJWT)
             const registryMetadata = entityConfig.metadata
-            const lookupResponse = await fetch(
+            const lookupResponse = await this.#fetch(
               `${registryMetadata.federation_entity.federation_fetch_endpoint as string}?sub=${did}`
             )
             if (lookupResponse.status === 200) {
@@ -111,7 +120,7 @@ export class RegistryClient {
           // TODO: could validate the JWT
         } else if (registryEntry.type === 'dcc-legacy') {
           try {
-            const response = await fetch(registryEntry.url as string)
+            const response = await this.#fetch(registryEntry.url as string)
             const listOfIssuersByDID =
               (await response.json()) as LegacyRegistryResult
             const matchingIssuer = listOfIssuersByDID.registry[did]
@@ -162,7 +171,13 @@ export class RegistryClient {
     return { matchingIssuers, uncheckedRegistries }
   }
 
-  constructor() {
+  /**
+   * @param [options.fetch] - the fetch implementation every registry request
+   *   goes through. Defaults to `globalThis.fetch`, resolved per call so a test
+   *   double installed after construction is still picked up.
+   */
+  constructor({ fetch: registryFetch }: { fetch?: RegistryFetch } = {}) {
     this.#registries = []
+    this.#fetch = registryFetch ?? (async url => await globalThis.fetch(url))
   }
 }

@@ -1,5 +1,16 @@
 # `@digitalcredentials/issuer-registry-client` Changelog
 
+## 4.1.0 - TBD
+
+### Added
+
+- `new RegistryClient({ fetch })` -- an optional injectable `fetch` that every
+  registry request goes through, defaulting to `globalThis.fetch`. Lets a caller
+  apply its own timeouts, headers, caching, instrumentation, or test doubles,
+  and lets one whose runtime cannot reach a registry host directly (a browser,
+  where not every registry sends CORS headers) route requests through a proxy or
+  gateway of its own.
+
 ## 4.0.0 - 2026-06-05
 
 ### Changed
