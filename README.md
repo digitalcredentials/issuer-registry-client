@@ -161,6 +161,17 @@ const registryClient = new RegistryClient({
 
 It is called with a URL and returns a `Response`, exactly like `fetch`.
 
+Note that it is called as a method of the client, so a bare global reference --
+`{ fetch }` or `{ fetch: globalThis.fetch }` -- is a detached call. In a browser
+that throws `TypeError: Illegal invocation`, and every registry comes back in
+`uncheckedRegistries`. Wrap it, as in the example above, or bind it:
+
+```js
+const registryClient = new RegistryClient({
+  fetch: globalThis.fetch.bind(globalThis)
+})
+```
+
 Here is an example lookup response for a DID that is registered in one legacy
 registry, one OIDF regsitry, and also lists one registry that couldn't checked
 for some reason (e.g., the server was down):
