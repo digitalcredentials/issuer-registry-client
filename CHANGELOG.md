@@ -1,6 +1,6 @@
 # `@digitalcredentials/issuer-registry-client` Changelog
 
-## 4.1.0 - TBD
+## 4.1.0 - 2026-08-31
 
 ### Added
 
